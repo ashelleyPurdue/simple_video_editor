@@ -20,6 +20,7 @@ namespace VideoEditorWPF
 	/// </summary>
 	public partial class TimelineLayerView : UserControl, IPannableZoomable
 	{
+        #region IPannableZoomable
         public double ScaleFactor
         {
             get { return m_scaleFactor; }
@@ -36,8 +37,11 @@ namespace VideoEditorWPF
             get { return canvasPan.X; }
             set { canvasPan.X = value; }
         }
+        #endregion
 
-		private TranslateTransform canvasPan = new TranslateTransform();
+        public int NumEvents { get { return timelineEvents.Count; } }
+
+        private TranslateTransform canvasPan = new TranslateTransform();
 
 		private List<TimelineEvent> timelineEvents = new List<TimelineEvent>();
 		private Dictionary<TimelineEvent, TimelineEventControl> eventControls = new Dictionary<TimelineEvent, TimelineEventControl>();
@@ -91,6 +95,11 @@ namespace VideoEditorWPF
 			eventControls.Remove(timelineEvent);
 			eventsCanvas.Children.Remove(eventControl);
 		}
+
+        public TimelineEvent GetEvent(int index)
+        {
+            return timelineEvents[index];
+        }
 
 		/// <summary>
 		/// Returns the event that's occuring at the given time
