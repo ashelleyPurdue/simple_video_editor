@@ -42,9 +42,7 @@ namespace VideoEditorWPF
         }
         private double m_pan = 0;
 
-        /// <summary>
-        /// The height of each layer
-        /// </summary>
+        // The height of each layer
         public double LayerHeight
         {
             get { return m_layerHeight; }
@@ -91,9 +89,7 @@ namespace VideoEditorWPF
 
         private void UpdateInterface()
         {
-            //Update the scrubber
-            scrubber.Pan = Pan;
-            scrubber.ScaleFactor = ScaleFactor;
+            //TODO: Update the scrubber
 
             //Update the layers
             foreach (TimelineLayerView layer in layers)

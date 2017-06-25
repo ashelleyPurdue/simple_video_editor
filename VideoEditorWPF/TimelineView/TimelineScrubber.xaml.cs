@@ -46,9 +46,7 @@ namespace VideoEditorWPF
 
         #endregion
 
-        /// <summary>
-        /// The position of the scrubber in the timeline
-        /// </summary>
+        //The position of the scrubber in the timeline
         public double ScrubPos
         {
             get { return m_scrubPos; }
