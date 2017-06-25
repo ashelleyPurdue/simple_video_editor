@@ -209,11 +209,11 @@ namespace VideoEditorWPF
             }
 
             //The snap points are in units of time.  Convert the closest one to a physical point on the UI
-            double physicalSnapPoint = IPannableZoomableUtils.LocalToGlobalPos((double)closestSnapPoint, this);
+            double physicalSnapPoint = (double)closestSnapPoint;
             double physicalSnapDist = Math.Abs(physicalSnapPoint - scrubberTargetPos);
 
             //Snap to the point if it's close enough
-            const double SNAP_MARGIN = 1;
+            const double SNAP_MARGIN = 10;
             if (physicalSnapDist < SNAP_MARGIN)
             {
                 ScrubPos = physicalSnapPoint;
