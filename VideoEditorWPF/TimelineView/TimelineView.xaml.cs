@@ -126,18 +126,15 @@ namespace VideoEditorWPF
             scrubHandle.Margin = margin;
 
             //Update the seek line's position
-            margin = seekLine.Margin;
+            margin = scrubberRedLine.Margin;
             margin.Left = pos;
-            seekLine.Margin = margin;
+            scrubberRedLine.Margin = margin;
         }
 
-        
-        /// <summary>
-        /// Updates the given layer
-        /// </summary>
-        /// <param name="layer"></param>
         private void UpdateLayer(TimelineLayerView layer)
         {
+            //Updates the given layer
+
             //set the pan and scale factors
             layer.Pan = Pan;
             layer.ScaleFactor = ScaleFactor;
@@ -155,6 +152,13 @@ namespace VideoEditorWPF
 
             //Set the alignment
             layer.HorizontalAlignment = HorizontalAlignment.Stretch;
+        }
+
+        private void scrubberClickLine_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            //change the scrub pos to the place we clicked on
+            double clickedPos = e.GetPosition(this).X;
+            ScrubPos = IPannableZoomableUtils.GlobalToLocalPos(clickedPos, this);
         }
     }
 }
