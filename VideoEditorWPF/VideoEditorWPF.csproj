@@ -63,9 +63,6 @@
     <Compile Include="TimelineView\TimelineLayerView.xaml.cs">
       <DependentUpon>TimelineLayerView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="TimelineView\TimelineScrubber.xaml.cs">
-      <DependentUpon>TimelineScrubber.xaml</DependentUpon>
-    </Compile>
     <Compile Include="TimelineView\TimelineView.xaml.cs">
       <DependentUpon>TimelineView.xaml</DependentUpon>
     </Compile>
@@ -86,10 +83,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="TimelineView\TimelineLayerView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="TimelineView\TimelineScrubber.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
