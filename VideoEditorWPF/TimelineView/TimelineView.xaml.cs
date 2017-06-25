@@ -70,19 +70,19 @@ namespace VideoEditorWPF
         }
         private double m_layerSpacing = 5;
 
-        //The position of the scrubber in the timeline
-        public double ScrubPos
+        //The time that the scrubber is pointing to
+        public double SelectedTime
         {
-            get { return m_scrubPos; }
+            get { return m_selectedTime; }
             set
             {
-                m_scrubPos = value;
+                m_selectedTime = value;
                 UpdateScrubber();
             }
         }
-        private double m_scrubPos = 0;
+        private double m_selectedTime = 0;
 
-        private double scrubberTargetPos = 0;   //Used for snapping the scrubber to the beginning/ending of timeline events while dragging
+        private double scrubberTargetTime = 0;   //Used for snapping the scrubber to the beginning/ending of timeline events while dragging
 
         private List<TimelineLayerView> layers = new List<TimelineLayerView>();
 
@@ -125,7 +125,7 @@ namespace VideoEditorWPF
         private void UpdateScrubber()
         {
             //Update the handle's position
-            double pos = IPannableZoomableUtils.LocalToGlobalPos(ScrubPos, this);
+            double pos = IPannableZoomableUtils.LocalToGlobalPos(SelectedTime, this);
 
             Thickness margin = scrubHandle.Margin;
             margin.Left = pos - scrubHandle.Width / 2;
@@ -199,7 +199,7 @@ namespace VideoEditorWPF
             foreach (decimal point in snapPoints)
             {
                 //Update the closest snap point
-                decimal dist = Math.Abs(point - (decimal)scrubberTargetPos);
+                decimal dist = Math.Abs(point - (decimal)scrubberTargetTime);
 
                 if (dist < closestSnapDistance)
                 {
@@ -210,17 +210,13 @@ namespace VideoEditorWPF
 
             //The snap points are in units of time.  Convert the closest one to a physical point on the UI
             double physicalSnapPoint = (double)closestSnapPoint;
-            double physicalSnapDist = Math.Abs(physicalSnapPoint - scrubberTargetPos);
+            double physicalSnapDist = Math.Abs(physicalSnapPoint - scrubberTargetTime);
 
             //Snap to the point if it's close enough
-            const double SNAP_MARGIN = 10;
-            if (physicalSnapDist < SNAP_MARGIN)
+            const decimal SNAP_MARGIN = 10;
+            if (closestSnapDistance < SNAP_MARGIN)
             {
-                ScrubPos = physicalSnapPoint;
-            }
-            else
-            {
-                ScrubPos = scrubberTargetPos;
+                SelectedTime = physicalSnapPoint;
             }
         }
 
@@ -231,7 +227,7 @@ namespace VideoEditorWPF
         {
             //change the scrub pos to the place we clicked on
             double clickedPos = e.GetPosition(this).X;
-            ScrubPos = IPannableZoomableUtils.GlobalToLocalPos(clickedPos, this);
+            SelectedTime = IPannableZoomableUtils.GlobalToLocalPos(clickedPos, this);
         }
 
         private void scrubHandle_MouseDown(object sender, MouseButtonEventArgs e)
@@ -243,7 +239,7 @@ namespace VideoEditorWPF
             isDragging = true;
             prevDragPos = e.GetPosition(this).X;
 
-            scrubberTargetPos = ScrubPos;
+            scrubberTargetTime = SelectedTime;
         }
 
         private void scrubHandle_MouseMove(object sender, MouseEventArgs e)
@@ -260,8 +256,8 @@ namespace VideoEditorWPF
             prevDragPos = newX;
 
             //Scale it then add it to the scrub pos
-            scrubberTargetPos += delta / ScaleFactor;
-            //ScrubPos = scrubberTargetPos;
+            scrubberTargetTime += delta / ScaleFactor;
+            ScrubPos = scrubberTargetPos;
 
             //If the scrubber's target pos is close to a "snap point", snap the ScrubPos there.
             SnapToPoint();
