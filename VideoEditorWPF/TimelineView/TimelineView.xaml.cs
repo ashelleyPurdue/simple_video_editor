@@ -20,6 +20,8 @@ namespace VideoEditorWPF
     /// </summary>
     public partial class TimelineView : UserControl, IPannableZoomable
     {
+        #region IPannableZoomable
+
         public double ScaleFactor
         {
             get { return m_scaleFactor; }
@@ -42,7 +44,9 @@ namespace VideoEditorWPF
         }
         private double m_pan = 0;
 
-        // The height of each layer
+        #endregion
+
+        //The height of each layer
         public double LayerHeight
         {
             get { return m_layerHeight; }
@@ -54,6 +58,7 @@ namespace VideoEditorWPF
         }
         private double m_layerHeight = 100;
 
+        //How far apart the layers should be spaced
         public double LayerSpacing
         {
             get { return m_layerSpacing; }
@@ -64,6 +69,18 @@ namespace VideoEditorWPF
             }
         }
         private double m_layerSpacing = 5;
+
+        //The position of the scrubber in the timeline
+        public double ScrubPos
+        {
+            get { return m_scrubPos; }
+            set
+            {
+                m_scrubPos = value;
+                UpdateScrubber();
+            }
+        }
+        private double m_scrubPos = 0;
 
         private List<TimelineLayerView> layers = new List<TimelineLayerView>();
 
@@ -89,7 +106,8 @@ namespace VideoEditorWPF
 
         private void UpdateInterface()
         {
-            //TODO: Update the scrubber
+            //Update the scrubber
+            UpdateScrubber();
 
             //Update the layers
             foreach (TimelineLayerView layer in layers)
@@ -97,6 +115,22 @@ namespace VideoEditorWPF
                 UpdateLayer(layer);
             }
         }
+
+        private void UpdateScrubber()
+        {
+            //Update the handle's position
+            double pos = IPannableZoomableUtils.LocalToGlobalPos(ScrubPos, this);
+
+            Thickness margin = scrubHandle.Margin;
+            margin.Left = pos - scrubHandle.Width / 2;
+            scrubHandle.Margin = margin;
+
+            //Update the seek line's position
+            margin = seekLine.Margin;
+            margin.Left = pos;
+            seekLine.Margin = margin;
+        }
+
         
         /// <summary>
         /// Updates the given layer
