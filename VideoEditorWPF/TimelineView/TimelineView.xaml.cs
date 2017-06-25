@@ -208,9 +208,15 @@ namespace VideoEditorWPF
                 }
             }
 
+            //Find the scrubber's physical distance from the snap point
+            double physicalScrubberPos = IPannableZoomableUtils.LocalToGlobalPos((double)scrubberTargetTime, this);
+            double physicalSnapPos = IPannableZoomableUtils.LocalToGlobalPos((double)closestSnapPoint, this);
+
+            double physicalDistance = Math.Abs(physicalScrubberPos - physicalSnapPos);
+
             //Snap to the point if it's close enough
-            const decimal SNAP_MARGIN = 10;
-            if (closestSnapDistance < SNAP_MARGIN)
+            const double SNAP_MARGIN = 5;
+            if (physicalDistance < SNAP_MARGIN)
             {
                 SelectedTime = closestSnapPoint;
             }
