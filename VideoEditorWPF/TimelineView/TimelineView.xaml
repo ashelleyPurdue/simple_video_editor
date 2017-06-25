@@ -12,7 +12,7 @@
         </ScrollViewer>
         <Grid x:Name="scrubberGrid" VerticalAlignment="Top" Height="26" ClipToBounds="True" Background="{DynamicResource {x:Static SystemColors.ControlDarkDarkBrushKey}}">
             <Rectangle x:Name="scrubberClickLine" Fill="Black" Height="5" Margin="0" StrokeThickness="10" VerticalAlignment="Center" MouseDown="scrubberClickLine_MouseDown"/>
-            <Rectangle x:Name="scrubHandle" Fill="White" HorizontalAlignment="Left" Height="27" Margin="0" VerticalAlignment="Center" Width="11" Stroke="Black" SnapsToDevicePixels="True" ClipToBounds="True"/>
+            <Rectangle x:Name="scrubHandle" Fill="White" HorizontalAlignment="Left" Height="27" Margin="0" VerticalAlignment="Center" Width="11" Stroke="Black" SnapsToDevicePixels="True" ClipToBounds="True" MouseDown="scrubHandle_MouseDown" MouseMove="scrubHandle_MouseMove" MouseUp="scrubHandle_MouseUp"/>
         </Grid>
         <Rectangle x:Name="scrubberRedLine" HorizontalAlignment="Left" IsHitTestVisible="False" Width="1" Fill="Red" Margin="0,0,0,0"/>
 

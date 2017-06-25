@@ -84,6 +84,10 @@ namespace VideoEditorWPF
 
         private List<TimelineLayerView> layers = new List<TimelineLayerView>();
 
+        private bool isDragging = false;
+        private double prevDragPos = 0;
+
+
         public TimelineView()
         {
             InitializeComponent();
@@ -159,6 +163,42 @@ namespace VideoEditorWPF
             //change the scrub pos to the place we clicked on
             double clickedPos = e.GetPosition(this).X;
             ScrubPos = IPannableZoomableUtils.GlobalToLocalPos(clickedPos, this);
+        }
+
+        private void scrubHandle_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            //Capture the mouse so things don't break if the user moves the mouse beyond this control's borders
+            Mouse.Capture(scrubHandle, CaptureMode.Element);
+
+            //Start dragging
+            isDragging = true;
+            prevDragPos = e.GetPosition(this).X;
+        }
+
+        private void scrubHandle_MouseMove(object sender, MouseEventArgs e)
+        {
+            //Only move the scrubber if we're dragging
+            if (!isDragging)
+            {
+                return;
+            }
+
+            //Compute the change in mouse position
+            double newX = e.GetPosition(this).X;
+            double delta = newX - prevDragPos;
+            prevDragPos = newX;
+
+            //Scale it then add it to the scrub pos
+            ScrubPos += delta / ScaleFactor;
+        }
+
+        private void scrubHandle_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            //Un-capture the mouse
+            Mouse.Capture(scrubHandle, CaptureMode.None);
+
+            //Stop dragging
+            isDragging = false;
         }
     }
 }
