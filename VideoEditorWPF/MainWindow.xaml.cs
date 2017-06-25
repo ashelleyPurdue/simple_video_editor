@@ -45,6 +45,10 @@ namespace VideoEditorWPF
 		{
 			if (e.ChangedButton == MouseButton.Middle)
 			{
+                //Capture the mouse, so things don't break if the user drags out of the border
+                Mouse.Capture(timelineView, CaptureMode.Element);
+
+                //Start panning
 				isPanning = true;
 				prevPanPos = e.GetPosition(timelineView).X;
 			}
@@ -68,6 +72,8 @@ namespace VideoEditorWPF
 		{
 			if (e.ChangedButton == MouseButton.Middle)
 			{
+                //Stop panning
+                Mouse.Capture(timelineView, CaptureMode.None);
 				isPanning = false;
 			}
 		}
