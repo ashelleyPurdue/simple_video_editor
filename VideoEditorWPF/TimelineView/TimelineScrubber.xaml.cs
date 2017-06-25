@@ -99,6 +99,9 @@ namespace VideoEditorWPF
 
         private void scrubHandle_MouseDown(object sender, MouseButtonEventArgs e)
         {
+            //Capture the mouse so things don't break if the user moves the mouse beyond this control's borders
+            Mouse.Capture(scrubHandle, CaptureMode.Element);
+
             //Start dragging
             isDragging = true;
             prevDragPos = e.GetPosition(this).X;
@@ -123,6 +126,9 @@ namespace VideoEditorWPF
 
         private void scrubHandle_MouseUp(object sender, MouseButtonEventArgs e)
         {
+            //Un-capture the mouse
+            Mouse.Capture(scrubHandle, CaptureMode.None);
+
             //Stop dragging
             isDragging = false;
         }
