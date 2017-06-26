@@ -226,7 +226,7 @@ namespace VideoEditorWPF
 
         //Event handlers
 
-        private void scrubberClickLine_MouseDown(object sender, MouseButtonEventArgs e)
+        private void scrubberGrid_MouseDown(object sender, MouseButtonEventArgs e)
         {
             //change the scrub pos to the place we clicked on
             double clickedPos = e.GetPosition(this).X;
