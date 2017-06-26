@@ -16,6 +16,6 @@
                       ResizeDirection="Rows"
                       ShowsPreview="True"
                       Grid.Row="0" Style="{DynamicResource DarkGridSplitterStyle}"/>
-        <local:TimelineView x:Name="timelineView" Margin="10,10,10,5" MouseDown="timelineView_MouseDown" MouseMove="timelineView_MouseMove" MouseUp="timelineView_MouseUp" MouseWheel="timelineView_MouseWheel" Grid.Row="1"/>
+        <local:TimelineView x:Name="timelineView" Margin="10" MouseDown="timelineView_MouseDown" MouseMove="timelineView_MouseMove" MouseUp="timelineView_MouseUp" MouseWheel="timelineView_MouseWheel" Grid.Row="1"/>
     </Grid>
 </Window>

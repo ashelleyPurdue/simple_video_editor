@@ -134,6 +134,7 @@ namespace VideoEditorWPF
             //Update the seek line's position
             margin = scrubberRedLine.Margin;
             margin.Left = pos;
+            margin.Top = scrubHandle.Margin.Top + scrubHandle.Height;
             scrubberRedLine.Margin = margin;
         }
 
