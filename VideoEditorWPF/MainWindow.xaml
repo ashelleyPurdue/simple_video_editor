@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:VideoEditorWPF"
         mc:Ignorable="d"
-        Title="MainWindow" Height="530.867" Width="766.763">
+        Title="MainWindow" Height="530.867" Width="766.763" Style="{DynamicResource DarkWindowStyle}">
     <Grid x:Name="grid">
         <Grid.RowDefinitions>
             <RowDefinition Height="333*"/>
@@ -15,7 +15,7 @@
                       VerticalAlignment="Bottom"
                       ResizeDirection="Rows"
                       ShowsPreview="True"
-                      Grid.Row="0"/>
+                      Grid.Row="0" Style="{DynamicResource DarkGridSplitterStyle}"/>
         <local:TimelineView x:Name="timelineView" Margin="10,10,10,5" MouseDown="timelineView_MouseDown" MouseMove="timelineView_MouseMove" MouseUp="timelineView_MouseUp" MouseWheel="timelineView_MouseWheel" Grid.Row="1"/>
     </Grid>
 </Window>
