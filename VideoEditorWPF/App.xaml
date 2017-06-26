@@ -54,7 +54,7 @@
             </Setter>
         </Style>
         <Style x:Key="DarkGridSplitterStyle" TargetType="{x:Type GridSplitter}">
-            <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.ControlDarkDarkBrushKey}}"/>
+            <Setter Property="Background" Value="#FF1E1E1E"/>
             <Setter Property="PreviewStyle" Value="{StaticResource GridSplitterPreviewStyle}"/>
             <Setter Property="Template">
                 <Setter.Value>
