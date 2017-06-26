@@ -7,6 +7,15 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="530.867" Width="766.763">
     <Grid x:Name="grid">
-        <local:TimelineView x:Name="timelineView" Margin="10,345,10,10" MouseDown="timelineView_MouseDown" MouseMove="timelineView_MouseMove" MouseUp="timelineView_MouseUp" MouseWheel="timelineView_MouseWheel"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="333*"/>
+            <RowDefinition Height="167*"/>
+        </Grid.RowDefinitions>
+        <GridSplitter Height="6" HorizontalAlignment="Stretch" Margin="0"
+                      VerticalAlignment="Bottom"
+                      ResizeDirection="Rows"
+                      ShowsPreview="True"
+                      Grid.Row="0"/>
+        <local:TimelineView x:Name="timelineView" Margin="10,10,10,5" MouseDown="timelineView_MouseDown" MouseMove="timelineView_MouseMove" MouseUp="timelineView_MouseUp" MouseWheel="timelineView_MouseWheel" Grid.Row="1"/>
     </Grid>
 </Window>
