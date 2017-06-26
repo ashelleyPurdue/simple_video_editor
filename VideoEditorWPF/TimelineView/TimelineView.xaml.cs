@@ -235,6 +235,12 @@ namespace VideoEditorWPF
 
         private void scrubHandle_MouseDown(object sender, MouseButtonEventArgs e)
         {
+            //Only start dragging if it's a left-click
+            if (e.ChangedButton != MouseButton.Left)
+            {
+                return;
+            }
+
             //Capture the mouse so things don't break if the user moves the mouse beyond this control's borders
             Mouse.Capture(scrubHandle, CaptureMode.Element);
 
