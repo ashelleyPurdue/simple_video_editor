@@ -228,6 +228,11 @@ namespace VideoEditorWPF
 
         private void scrubberGrid_MouseDown(object sender, MouseButtonEventArgs e)
         {
+            if (e.ChangedButton != MouseButton.Left)
+            {
+                return;
+            }
+
             //change the scrub pos to the place we clicked on
             double clickedPos = e.GetPosition(this).X;
             SelectedTime = (decimal)IPannableZoomableUtils.GlobalToLocalPos(clickedPos, this);
