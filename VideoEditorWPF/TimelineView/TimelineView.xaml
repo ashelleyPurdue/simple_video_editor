@@ -7,7 +7,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="489.076">
     <Grid>
-        <ScrollViewer IsHitTestVisible="True" Margin="0,30,0,0">
+        <ScrollViewer IsHitTestVisible="True" Margin="0,30,0,0" Template="{DynamicResource DarkScrollViewerControlTemplate}" Background="#FF1E1E1E">
             <StackPanel x:Name="layerStackPanel"/>
         </ScrollViewer>
         <Grid x:Name="scrubberGrid" VerticalAlignment="Top" Height="26" ClipToBounds="True" Background="{DynamicResource {x:Static SystemColors.ControlDarkDarkBrushKey}}">
