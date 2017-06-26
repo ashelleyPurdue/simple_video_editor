@@ -106,7 +106,9 @@ namespace VideoEditorWPF
             layer.Margin = new Thickness(0);
 
             //Create a new row in the grid for the layer
-            layerGrid.RowDefinitions.Add(new RowDefinition());
+            if (layerGrid.RowDefinitions.Count < layers.Count)
+                layerGrid.RowDefinitions.Add(new RowDefinition());
+
             int rowIndex = layerGrid.RowDefinitions.Count - 1;
 
             layerGrid.RowDefinitions[rowIndex].MinHeight = 0;
