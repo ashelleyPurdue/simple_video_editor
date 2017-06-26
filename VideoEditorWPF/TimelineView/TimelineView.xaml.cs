@@ -100,8 +100,13 @@ namespace VideoEditorWPF
             //Add it to the list
             layers.Add(layer);
 
-            //Add it to the stack panel
-            layerStackPanel.Children.Add(layer);
+            //Add it to the layer grid
+            RowDefinition row = new RowDefinition();
+            layerGrid.RowDefinitions.Add(row);
+
+            Grid.SetColumn(layer, 0);
+            Grid.SetRow(layer, layerGrid.RowDefinitions.Count - 1);
+            layerGrid.Children.Add(layer);
 
             //Update this layer
             UpdateLayer(layer);
