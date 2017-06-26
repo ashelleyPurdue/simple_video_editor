@@ -100,13 +100,39 @@ namespace VideoEditorWPF
             //Add it to the list
             layers.Add(layer);
 
-            //Add it to the layer grid
-            RowDefinition row = new RowDefinition();
-            layerGrid.RowDefinitions.Add(row);
+            //Set the layer's alignment
+            layer.HorizontalAlignment = HorizontalAlignment.Stretch;
+            layer.VerticalAlignment = VerticalAlignment.Stretch;
+            layer.Margin = new Thickness(0);
 
+            //Create a new row in the grid for the layer
+            layerGrid.RowDefinitions.Add(new RowDefinition());
+            int rowIndex = layerGrid.RowDefinitions.Count - 1;
+
+            layerGrid.RowDefinitions[rowIndex].MinHeight = 0;
+
+            //Put the layer in the grid
             Grid.SetColumn(layer, 0);
-            Grid.SetRow(layer, layerGrid.RowDefinitions.Count - 1);
+            Grid.SetRow(layer, rowIndex);
             layerGrid.Children.Add(layer);
+
+            //Add a splitter
+            layerGrid.RowDefinitions.Add(new RowDefinition());
+
+            GridSplitter splitter = new GridSplitter();
+
+            splitter.Height = 5;
+            splitter.VerticalAlignment = VerticalAlignment.Bottom;
+            splitter.HorizontalAlignment = HorizontalAlignment.Stretch;
+
+            splitter.ResizeBehavior = GridResizeBehavior.BasedOnAlignment;
+            splitter.ResizeDirection = GridResizeDirection.Rows;
+
+            //splitter.Style = Resources["DarkGridSplitterStyle"] as Style;
+
+            Grid.SetColumn(splitter, 0);
+            Grid.SetRow(splitter, rowIndex);
+            layerGrid.Children.Add(splitter);
 
             //Update this layer
             UpdateLayer(layer);
@@ -150,20 +176,6 @@ namespace VideoEditorWPF
             //set the pan and scale factors
             layer.Pan = Pan;
             layer.ScaleFactor = ScaleFactor;
-
-            //Set the height
-            layer.Height = LayerHeight;
-
-            //Set the spacing
-            Thickness spacing = layer.Margin;
-
-            spacing.Bottom = LayerSpacing / 2;
-            spacing.Top = LayerSpacing / 2;
-
-            layer.Margin = spacing;
-
-            //Set the alignment
-            layer.HorizontalAlignment = HorizontalAlignment.Stretch;
         }
 
         private decimal[] GetSnapPoints()
