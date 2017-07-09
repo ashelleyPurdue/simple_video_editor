@@ -149,8 +149,7 @@ namespace VideoEditorWPF
 
             //Set the size
             eventControl.Width = (double)(eventControl.timelineEvent.endTime - eventControl.timelineEvent.startTime) * ScaleFactor;
-            eventControl.Height = (double)this.Height;
-            //eventControl.VerticalAlignment = VerticalAlignment.Stretch;
+            eventControl.Height = (double)this.ActualHeight;
         }
 	}
 

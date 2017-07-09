@@ -136,6 +136,9 @@ namespace VideoEditorWPF
             Grid.SetRow(splitter, rowIndex);
             layerGrid.Children.Add(splitter);
 
+            //Subscribe to the layer's size change, so the event heights will be updated when the splitters are moved.
+            layer.SizeChanged += layer_SizeChanged;
+
             //Update this layer
             UpdateLayer(layer);
         }
@@ -303,6 +306,13 @@ namespace VideoEditorWPF
 
             //Stop dragging
             isDragging = false;
+        }
+
+        private void layer_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            //Update the layer that was changed
+            TimelineLayerView layer = (TimelineLayerView)sender;
+            layer.UpdateInterface();
         }
     }
 }
