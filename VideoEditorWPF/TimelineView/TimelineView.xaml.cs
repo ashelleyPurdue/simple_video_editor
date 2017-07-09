@@ -46,6 +46,14 @@ namespace VideoEditorWPF
 
         #endregion
 
+        #region subscribable events
+
+        public delegate void EventMovedHandler(TimelineEvent timelineEvent, decimal newStartTime);
+
+        public event EventMovedHandler eventMoved;      //Raised after the user drags and drops an event to a new location
+
+        #endregion
+
         //The height of each layer
         public double LayerHeight
         {
@@ -70,6 +78,10 @@ namespace VideoEditorWPF
         }
         private double m_layerSpacing = 5;
 
+        private List<TimelineLayerView> layers = new List<TimelineLayerView>();
+
+        #region scrubber fields
+
         //The time that the scrubber is pointing to
         public decimal SelectedTime
         {
@@ -82,12 +94,23 @@ namespace VideoEditorWPF
         }
         private decimal m_selectedTime = 0;
 
+        private bool isDraggingScrubber = false;
+        private double scrubberPrevDragPos = 0;
+
         private decimal scrubberTargetTime = 0;   //Used for snapping the scrubber to the beginning/ending of timeline events while dragging
 
-        private List<TimelineLayerView> layers = new List<TimelineLayerView>();
+        #endregion
 
-        private bool isDragging = false;
-        private double prevDragPos = 0;
+        #region TimelineEvent moving fields
+
+        private bool isDraggingEvent = false;
+        private TimelineEvent eventDragged = null;
+
+        private decimal eventDragClickTime = 0;     //The time in the timeline that the user clicked when they started dragging.
+
+        //CURRENT TASK: Clicking and dragging to move events.  Just raise eventMoved when the mouse is released in a new position.
+
+        #endregion
 
 
         public TimelineView()
@@ -136,8 +159,9 @@ namespace VideoEditorWPF
             Grid.SetRow(splitter, rowIndex);
             layerGrid.Children.Add(splitter);
 
-            //Subscribe to the layer's size change, so the event heights will be updated when the splitters are moved.
+            //Subscribe to the layer's events.
             layer.SizeChanged += layer_SizeChanged;
+            layer.MouseDown += layer_MouseDown;
 
             //Update this layer
             UpdateLayer(layer);
@@ -272,8 +296,8 @@ namespace VideoEditorWPF
             Mouse.Capture(scrubHandle, CaptureMode.Element);
 
             //Start dragging
-            isDragging = true;
-            prevDragPos = e.GetPosition(this).X;
+            isDraggingScrubber = true;
+            scrubberPrevDragPos = e.GetPosition(this).X;
 
             scrubberTargetTime = SelectedTime;
         }
@@ -281,15 +305,15 @@ namespace VideoEditorWPF
         private void scrubHandle_MouseMove(object sender, MouseEventArgs e)
         {
             //Only move the scrubber if we're dragging
-            if (!isDragging)
+            if (!isDraggingScrubber)
             {
                 return;
             }
 
             //Compute the change in mouse position
             double newX = e.GetPosition(this).X;
-            double delta = newX - prevDragPos;
-            prevDragPos = newX;
+            double delta = newX - scrubberPrevDragPos;
+            scrubberPrevDragPos = newX;
 
             //Scale it then add it to the scrub pos
             scrubberTargetTime += (decimal)(delta / ScaleFactor);
@@ -305,7 +329,7 @@ namespace VideoEditorWPF
             Mouse.Capture(scrubHandle, CaptureMode.None);
 
             //Stop dragging
-            isDragging = false;
+            isDraggingScrubber = false;
         }
 
         private void layer_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -313,6 +337,62 @@ namespace VideoEditorWPF
             //Update the layer that was changed
             TimelineLayerView layer = (TimelineLayerView)sender;
             layer.UpdateInterface();
+        }
+
+        private void layer_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            TimelineLayerView layer = (TimelineLayerView)sender;
+
+            //Don't go on unless it's a left click
+            if (e.ChangedButton != MouseButton.Left)
+            {
+                return;
+            }
+
+            //Check if we're clicking on an event
+            decimal timeClicked = (decimal)IPannableZoomableUtils.LocalToGlobalPos(e.GetPosition(this).X, layer);
+            TimelineEvent eventClicked = layer.GetEventAt(timeClicked);
+
+            //If we clicked on an event, start dragging it
+            if (eventClicked != null)
+            {
+                eventDragged = eventClicked;
+                eventDragClickTime = timeClicked;
+                isDraggingEvent = true;
+
+                Mouse.Capture(layer, CaptureMode.Element);
+            }
+
+        }
+
+        private void layer_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            TimelineLayerView layer = (TimelineLayerView)sender;
+
+            //Don't go on if it's not the left button
+            if (e.ChangedButton != MouseButton.Left)
+            {
+                return;
+            }
+
+            //Don't go on if we're not dragging an event
+            if (!isDraggingEvent)
+            {
+                return;
+            }
+
+            //Calculate the new start time for the event
+            decimal timeDropped = (decimal)IPannableZoomableUtils.GlobalToLocalPos(e.GetPosition(this).X, layer);
+            decimal deltaTime = timeDropped - eventDragClickTime;
+            decimal newStartTime = eventDragged.startTime + deltaTime;
+
+            //Raise the eventMoved event
+            eventMoved(eventDragged, newStartTime);
+
+            //Stop dragging
+            isDraggingEvent = false;
+            Mouse.Capture(layer, CaptureMode.None);
+            eventDragged = null;
         }
     }
 }
