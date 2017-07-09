@@ -397,6 +397,9 @@ namespace VideoEditorWPF
             isDraggingEvent = false;
             Mouse.Capture(layer, CaptureMode.None);
             eventDragged = null;
+
+            //Update the layer
+            layer.UpdateInterface();
         }
     }
 }

@@ -89,5 +89,15 @@ namespace VideoEditorWPF
 
             timelineView.ScaleFactor = newScaleFactor;
 		}
-	}
+
+        private void timelineView_eventMoved(TimelineEvent timelineEvent, decimal newStartTime)
+        {
+            //TODO: Error checking
+
+            //Move the event
+            decimal delta = newStartTime - timelineEvent.startTime;
+            timelineEvent.startTime += delta;
+            timelineEvent.endTime += delta;
+        }
+    }
 }
