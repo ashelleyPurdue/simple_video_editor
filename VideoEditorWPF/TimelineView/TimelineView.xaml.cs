@@ -162,6 +162,7 @@ namespace VideoEditorWPF
             //Subscribe to the layer's events.
             layer.SizeChanged += layer_SizeChanged;
             layer.MouseDown += layer_MouseDown;
+            layer.MouseUp += layer_MouseUp;
 
             //Update this layer
             UpdateLayer(layer);
@@ -350,7 +351,7 @@ namespace VideoEditorWPF
             }
 
             //Check if we're clicking on an event
-            decimal timeClicked = (decimal)IPannableZoomableUtils.LocalToGlobalPos(e.GetPosition(this).X, layer);
+            decimal timeClicked = (decimal)IPannableZoomableUtils.GlobalToLocalPos(e.GetPosition(this).X, layer);
             TimelineEvent eventClicked = layer.GetEventAt(timeClicked);
 
             //If we clicked on an event, start dragging it
@@ -387,7 +388,10 @@ namespace VideoEditorWPF
             decimal newStartTime = eventDragged.startTime + deltaTime;
 
             //Raise the eventMoved event
-            eventMoved(eventDragged, newStartTime);
+            if (eventMoved != null)
+            {
+                eventMoved(eventDragged, newStartTime);
+            }
 
             //Stop dragging
             isDraggingEvent = false;
