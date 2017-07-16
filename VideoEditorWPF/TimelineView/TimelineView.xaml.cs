@@ -104,12 +104,9 @@ namespace VideoEditorWPF
         #region TimelineEvent moving fields
 
         private bool isDraggingEvent = false;
-        private TimelineEvent eventDragged = null;
-
         private decimal eventDragClickTime = 0;     //The time in the timeline that the user clicked when they started dragging.
 
-        //CURRENT TASK: Clicking and dragging to move events.  Just raise eventMoved when the mouse is released in a new position.
-
+        private TimelineEvent eventDragged = null;
         #endregion
 
 
@@ -162,6 +159,7 @@ namespace VideoEditorWPF
             //Subscribe to the layer's events.
             layer.SizeChanged += layer_SizeChanged;
             layer.MouseDown += layer_MouseDown;
+            layer.MouseMove += layer_MouseMove;
             layer.MouseUp += layer_MouseUp;
 
             //Update this layer
@@ -357,13 +355,41 @@ namespace VideoEditorWPF
             //If we clicked on an event, start dragging it
             if (eventClicked != null)
             {
+                //Start dragging
                 eventDragged = eventClicked;
                 eventDragClickTime = timeClicked;
                 isDraggingEvent = true;
 
                 Mouse.Capture(layer, CaptureMode.Element);
+
+                //Show the preview rectangle
+                previewRect.Visibility = Visibility.Visible;
+
+                previewRect.Height = layer.ActualHeight;
+                previewRect.Width = (double)(eventClicked.endTime - eventClicked.startTime) * ScaleFactor;
+
+                Thickness rectMargin = previewRect.Margin;
+                rectMargin.Top = layer.Margin.Top;
+                rectMargin.Left = e.GetPosition(this).X;
+                previewRect.Margin = rectMargin;
             }
 
+        }
+
+        private void layer_MouseMove(object sender, MouseEventArgs e)
+        {
+            TimelineLayerView layer = (TimelineLayerView)sender;
+
+            //Skip if we're not dragging an event
+            if (!isDraggingEvent)
+            {
+                return;
+            }
+
+            //TODO: Move the preview rectangle
+            Thickness rectMargin = previewRect.Margin;
+            rectMargin.Left = e.GetPosition(this).X;
+            previewRect.Margin = rectMargin;
         }
 
         private void layer_MouseUp(object sender, MouseButtonEventArgs e)
@@ -397,6 +423,9 @@ namespace VideoEditorWPF
             isDraggingEvent = false;
             Mouse.Capture(layer, CaptureMode.None);
             eventDragged = null;
+
+            //Hide the preview rectangle
+            previewRect.Visibility = Visibility.Collapsed;
 
             //Update the layer
             layer.UpdateInterface();
