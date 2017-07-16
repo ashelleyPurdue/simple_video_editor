@@ -365,6 +365,9 @@ namespace VideoEditorWPF
                 //Show the preview rectangle
                 previewRect.Visibility = Visibility.Visible;
 
+                grid.Children.Remove(previewRect);
+                layer.eventsCanvas.Children.Add(previewRect);
+
                 previewRect.Height = layer.ActualHeight;
                 previewRect.Width = (double)(eventClicked.endTime - eventClicked.startTime) * ScaleFactor;
 
@@ -426,6 +429,7 @@ namespace VideoEditorWPF
 
             //Hide the preview rectangle
             previewRect.Visibility = Visibility.Collapsed;
+            layer.eventsCanvas.Children.Remove(previewRect);
 
             //Update the layer
             layer.UpdateInterface();

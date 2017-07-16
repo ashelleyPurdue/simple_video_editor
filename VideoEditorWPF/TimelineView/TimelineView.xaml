@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:VideoEditorWPF"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="489.076">
-    <Grid>
+    <Grid x:Name="grid">
         <ScrollViewer IsHitTestVisible="True" Margin="0,30,0,0" Template="{DynamicResource DarkScrollViewerControlTemplate}" Background="#FF1E1E1E">
             <Grid x:Name="layerGrid"/>
         </ScrollViewer>
