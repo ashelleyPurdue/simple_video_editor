@@ -113,6 +113,10 @@ namespace VideoEditorWPF
         public TimelineView()
         {
             InitializeComponent();
+
+            //Make it so the preview rectangle starts out with no parent
+            //TODO: Find a cleaner way to do this.
+            grid.Children.Remove(previewRect);
         }
 
         public void AddLayer(TimelineLayerView layer)
@@ -364,16 +368,18 @@ namespace VideoEditorWPF
 
                 //Show the preview rectangle
                 previewRect.Visibility = Visibility.Visible;
-
-                grid.Children.Remove(previewRect);
                 layer.eventsCanvas.Children.Add(previewRect);
 
+                //Set the preview rectangle's size
                 previewRect.Height = layer.ActualHeight;
                 previewRect.Width = (double)(eventClicked.endTime - eventClicked.startTime) * ScaleFactor;
 
+                //Set the preview rectangle's position
                 Thickness rectMargin = previewRect.Margin;
+
                 rectMargin.Top = layer.Margin.Top;
                 rectMargin.Left = e.GetPosition(this).X;
+
                 previewRect.Margin = rectMargin;
             }
 
@@ -389,7 +395,7 @@ namespace VideoEditorWPF
                 return;
             }
 
-            //TODO: Move the preview rectangle
+            //Move the preview rectangle
             Thickness rectMargin = previewRect.Margin;
             rectMargin.Left = e.GetPosition(this).X;
             previewRect.Margin = rectMargin;
