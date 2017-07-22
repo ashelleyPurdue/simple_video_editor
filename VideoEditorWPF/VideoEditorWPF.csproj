@@ -55,6 +55,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="MouseDragMonitor.cs" />
     <Compile Include="TimelineView\IPannableZoomable.cs" />
     <Compile Include="TimelineView\TimelineEvent.cs" />
     <Compile Include="TimelineView\TimelineEventControl.xaml.cs">
