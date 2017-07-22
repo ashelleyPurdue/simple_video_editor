@@ -48,7 +48,7 @@ namespace VideoEditorWPF
 
             //Start dragging
             isDragging = true;
-            prevMousePos = e.GetPosition(elementWatched);
+            prevMousePos = e.GetPosition(null);
             Mouse.Capture(elementWatched, CaptureMode.Element);     //Capture the mouse so the user can safely drag the mouse out of the watched object's bounds
 
             //Send the drag started event
@@ -63,7 +63,7 @@ namespace VideoEditorWPF
                 return;
 
             //Calculate the delta movement so we can put it in the event args
-            Point currentMousePos = e.GetPosition(elementWatched);
+            Point currentMousePos = e.GetPosition(null);
 
             double deltaX = currentMousePos.X - prevMousePos.X;
             double deltaY = currentMousePos.Y - prevMousePos.Y;
