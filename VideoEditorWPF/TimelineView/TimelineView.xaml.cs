@@ -323,6 +323,8 @@ namespace VideoEditorWPF
         {
             TimelineLayerView layer = (TimelineLayerView)sender;
 
+            //TODO: Rewrite this to use MouseDragMonitor
+
             //Don't go on unless it's a left click
             if (e.ChangedButton != MouseButton.Left)
             {
