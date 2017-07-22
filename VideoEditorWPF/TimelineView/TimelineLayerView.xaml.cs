@@ -101,13 +101,13 @@ namespace VideoEditorWPF
             return timelineEvents[index];
         }
 
-		/// <summary>
-		/// Returns the event that's occuring at the given time
-		/// Returns null if there is no event there
-		/// </summary>
-		/// <param name="time"></param>
-		/// <returns></returns>
-		public TimelineEvent GetEventAt(decimal time)
+        /// <summary>
+        /// Returns the event that's occuring at the given time
+        /// Returns null if there is no event there
+        /// </summary>
+        /// <param name="time"></param>
+        /// <returns></returns>
+        public TimelineEvent GetEventAt(double time)
 		{
 			foreach (TimelineEvent e in timelineEvents)
 			{
@@ -144,12 +144,12 @@ namespace VideoEditorWPF
         private void UpdateEventControl(TimelineEventControl eventControl)
         {
             //Set the position
-            Canvas.SetLeft(eventControl, (double)eventControl.timelineEvent.startTime * ScaleFactor);
+            Canvas.SetLeft(eventControl, eventControl.timelineEvent.startTime * ScaleFactor);
             Canvas.SetTop(eventControl, 0);
 
             //Set the size
-            eventControl.Width = (double)(eventControl.timelineEvent.endTime - eventControl.timelineEvent.startTime) * ScaleFactor;
-            eventControl.Height = (double)this.ActualHeight;
+            eventControl.Width = (eventControl.timelineEvent.endTime - eventControl.timelineEvent.startTime) * ScaleFactor;
+            eventControl.Height = this.ActualHeight;
         }
 	}
 

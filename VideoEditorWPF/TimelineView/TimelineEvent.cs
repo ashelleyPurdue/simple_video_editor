@@ -10,11 +10,11 @@ namespace VideoEditorWPF
 	{
 		public string name;
 
-		public decimal startTime;
-		public decimal endTime;
+		public double startTime;
+		public double endTime;
 		public Object data;
 
-		public TimelineEvent(string name, decimal startTime, decimal endTime, Object data)
+		public TimelineEvent(string name, double startTime, double endTime, Object data)
 		{
 			this.name = name;
 			this.startTime = startTime;

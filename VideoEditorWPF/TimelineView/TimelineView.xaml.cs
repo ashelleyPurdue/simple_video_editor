@@ -48,7 +48,7 @@ namespace VideoEditorWPF
 
         #region subscribable events
 
-        public delegate void EventMovedHandler(TimelineEvent timelineEvent, decimal newStartTime);
+        public delegate void EventMovedHandler(TimelineEvent timelineEvent, double newStartTime);
 
         public event EventMovedHandler eventMoved;      //Raised after the user drags and drops an event to a new location
 
@@ -83,7 +83,7 @@ namespace VideoEditorWPF
         #region scrubber fields
 
         //The time that the scrubber is pointing to
-        public decimal SelectedTime
+        public double SelectedTime
         {
             get { return m_selectedTime; }
             set
@@ -92,19 +92,19 @@ namespace VideoEditorWPF
                 UpdateScrubber();
             }
         }
-        private decimal m_selectedTime = 0;
+        private double m_selectedTime = 0;
 
         private bool isDraggingScrubber = false;
         private double scrubberPrevDragPos = 0;
 
-        private decimal scrubberTargetTime = 0;   //Used for snapping the scrubber to the beginning/ending of timeline events while dragging
+        private double scrubberTargetTime = 0;   //Used for snapping the scrubber to the beginning/ending of timeline events while dragging
 
         #endregion
 
         #region TimelineEvent moving fields
 
         private bool isDraggingEvent = false;
-        private decimal eventDragClickTime = 0;     //The time in the timeline that the user clicked when they started dragging.
+        private double eventDragClickTime = 0;     //The time in the timeline that the user clicked when they started dragging.
 
         private double previewRectPrevDragPos = 0;
 
@@ -212,11 +212,11 @@ namespace VideoEditorWPF
             layer.ScaleFactor = ScaleFactor;
         }
 
-        private decimal[] GetSnapPoints()
+        private double[] GetSnapPoints()
         {
             //Returns a list of all points that the scrubber should snap to.
 
-            List<decimal> snapPoints = new List<decimal>();
+            List<double> snapPoints = new List<double>();
 
             //Add the beginnings/endings of all events
             foreach (TimelineLayerView layer in layers)
@@ -236,7 +236,7 @@ namespace VideoEditorWPF
         private void SnapToPoint()
         {
             //Get all the snap points
-            decimal[] snapPoints = GetSnapPoints();
+            double[] snapPoints = GetSnapPoints();
 
             //Don't go on if there are no snap points
             if (snapPoints.Length == 0)
@@ -245,13 +245,13 @@ namespace VideoEditorWPF
             }
 
             //Find the closest snap point
-            decimal closestSnapPoint = 0;
-            decimal closestSnapDistance = decimal.MaxValue;
+            double closestSnapPoint = 0;
+            double closestSnapDistance = double.MaxValue;
 
-            foreach (decimal point in snapPoints)
+            foreach (double point in snapPoints)
             {
                 //Update the closest snap point
-                decimal dist = Math.Abs(point - (decimal)scrubberTargetTime);
+                double dist = Math.Abs(point - scrubberTargetTime);
 
                 if (dist < closestSnapDistance)
                 {
@@ -261,8 +261,8 @@ namespace VideoEditorWPF
             }
 
             //Find the scrubber's physical distance from the snap point
-            double physicalScrubberPos = IPannableZoomableUtils.LocalToGlobalPos((double)scrubberTargetTime, this);
-            double physicalSnapPos = IPannableZoomableUtils.LocalToGlobalPos((double)closestSnapPoint, this);
+            double physicalScrubberPos = IPannableZoomableUtils.LocalToGlobalPos(scrubberTargetTime, this);
+            double physicalSnapPos = IPannableZoomableUtils.LocalToGlobalPos(closestSnapPoint, this);
 
             double physicalDistance = Math.Abs(physicalScrubberPos - physicalSnapPos);
 
@@ -286,7 +286,7 @@ namespace VideoEditorWPF
 
             //change the scrub pos to the place we clicked on
             double clickedPos = e.GetPosition(this).X;
-            SelectedTime = (decimal)IPannableZoomableUtils.GlobalToLocalPos(clickedPos, this);
+            SelectedTime = IPannableZoomableUtils.GlobalToLocalPos(clickedPos, this);
         }
 
         private void scrubHandle_MouseDown(object sender, MouseButtonEventArgs e)
@@ -321,7 +321,7 @@ namespace VideoEditorWPF
             scrubberPrevDragPos = newX;
 
             //Scale it then add it to the scrub pos
-            scrubberTargetTime += (decimal)(delta / ScaleFactor);
+            scrubberTargetTime += delta / ScaleFactor;
             SelectedTime = scrubberTargetTime;
 
             //If the scrubber's target pos is close to a "snap point", snap the ScrubPos there.
@@ -355,7 +355,7 @@ namespace VideoEditorWPF
             }
 
             //Check if we're clicking on an event
-            decimal timeClicked = (decimal)IPannableZoomableUtils.GlobalToLocalPos(e.GetPosition(this).X, layer);
+            double timeClicked = IPannableZoomableUtils.GlobalToLocalPos(e.GetPosition(this).X, layer);
             TimelineEvent eventClicked = layer.GetEventAt(timeClicked);
 
             //If we clicked on an event, start dragging it
@@ -375,13 +375,13 @@ namespace VideoEditorWPF
 
                 //Set the preview rectangle's size
                 previewRect.Height = layer.ActualHeight;
-                previewRect.Width = (double)(eventClicked.endTime - eventClicked.startTime) * ScaleFactor;
+                previewRect.Width = (eventClicked.endTime - eventClicked.startTime) * ScaleFactor;
 
                 //Set the preview rectangle's position
                 Thickness rectMargin = previewRect.Margin;
 
                 rectMargin.Top = layer.Margin.Top;
-                rectMargin.Left = (double)eventClicked.startTime * ScaleFactor;
+                rectMargin.Left = eventClicked.startTime * ScaleFactor;
 
                 previewRect.Margin = rectMargin;
             }
@@ -425,9 +425,9 @@ namespace VideoEditorWPF
             }
 
             //Calculate the new start time for the event
-            decimal timeDropped = (decimal)IPannableZoomableUtils.GlobalToLocalPos(e.GetPosition(this).X, layer);
-            decimal deltaTime = timeDropped - eventDragClickTime;
-            decimal newStartTime = eventDragged.startTime + deltaTime;
+            double timeDropped = IPannableZoomableUtils.GlobalToLocalPos(e.GetPosition(this).X, layer);
+            double deltaTime = timeDropped - eventDragClickTime;
+            double newStartTime = eventDragged.startTime + deltaTime;
 
             //Raise the eventMoved event
             if (eventMoved != null)
