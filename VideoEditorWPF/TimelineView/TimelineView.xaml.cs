@@ -97,6 +97,8 @@ namespace VideoEditorWPF
         private bool isDraggingScrubber = false;
         private double scrubberPrevDragPos = 0;
 
+        private MouseDragMonitor scrubberDragMonitor;
+
         private double scrubberTargetTime = 0;   //Used for snapping the scrubber to the beginning/ending of timeline events while dragging
 
         #endregion
@@ -115,6 +117,11 @@ namespace VideoEditorWPF
         public TimelineView()
         {
             InitializeComponent();
+
+            //Subscribe to the scrubber drag monitor, so we can be informed when the user drags the scrubber
+            scrubberDragMonitor = new MouseDragMonitor(scrubHandle, MouseButton.Left);
+            scrubberDragMonitor.DragStarted += scrubHandle_DragStarted;
+            scrubberDragMonitor.DragMoved += scrubHandle_DragMoved;
 
             //Make it so the preview rectangle starts out with no parent
             //TODO: Find a cleaner way to do this.
@@ -289,52 +296,20 @@ namespace VideoEditorWPF
             SelectedTime = IPannableZoomableUtils.GlobalToLocalPos(clickedPos, this);
         }
 
-        private void scrubHandle_MouseDown(object sender, MouseButtonEventArgs e)
+        private void scrubHandle_DragStarted(DragEventArgs args)
         {
-            //Only start dragging if it's a left-click
-            if (e.ChangedButton != MouseButton.Left)
-            {
-                return;
-            }
-
-            //Capture the mouse so things don't break if the user moves the mouse beyond this control's borders
-            Mouse.Capture(scrubHandle, CaptureMode.Element);
-
-            //Start dragging
-            isDraggingScrubber = true;
-            scrubberPrevDragPos = e.GetPosition(this).X;
-
+            //Start the target time at its current time
             scrubberTargetTime = SelectedTime;
         }
 
-        private void scrubHandle_MouseMove(object sender, MouseEventArgs e)
+        private void scrubHandle_DragMoved(DragEventArgs args)
         {
-            //Only move the scrubber if we're dragging
-            if (!isDraggingScrubber)
-            {
-                return;
-            }
-
-            //Compute the change in mouse position
-            double newX = e.GetPosition(this).X;
-            double delta = newX - scrubberPrevDragPos;
-            scrubberPrevDragPos = newX;
-
-            //Scale it then add it to the scrub pos
-            scrubberTargetTime += delta / ScaleFactor;
+            //Move the scrubber when the user drags it
+            scrubberTargetTime += args.deltaX / ScaleFactor;
             SelectedTime = scrubberTargetTime;
 
             //If the scrubber's target pos is close to a "snap point", snap the ScrubPos there.
             SnapToPoint();
-        }
-
-        private void scrubHandle_MouseUp(object sender, MouseButtonEventArgs e)
-        {
-            //Un-capture the mouse
-            Mouse.Capture(scrubHandle, CaptureMode.None);
-
-            //Stop dragging
-            isDraggingScrubber = false;
         }
 
         private void layer_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -347,6 +322,8 @@ namespace VideoEditorWPF
         private void layer_MouseDown(object sender, MouseButtonEventArgs e)
         {
             TimelineLayerView layer = (TimelineLayerView)sender;
+
+            //TODO: Rewrite this to use MouseDragMonitor
 
             //Don't go on unless it's a left click
             if (e.ChangedButton != MouseButton.Left)
