@@ -48,7 +48,8 @@ namespace VideoEditorWPF
             Mouse.Capture(elementWatched, CaptureMode.Element);     //Capture the mouse so the user can safely drag the mouse out of the watched object's bounds
 
             //Send the drag started event
-            DragStarted(new DragEventArgs(buttonClicked, 0, 0));
+            if (DragStarted != null)
+                DragStarted(new DragEventArgs(buttonClicked, 0, 0));
         }
 
         private void ElementWatched_MouseMove(object sender, MouseEventArgs e)
@@ -67,7 +68,8 @@ namespace VideoEditorWPF
             prevMousePos = currentMousePos;
 
             //Fire the drag moved event
-            DragMoved(new DragEventArgs(buttonClicked, deltaX, deltaY));
+            if (DragMoved != null)
+                DragMoved(new DragEventArgs(buttonClicked, deltaX, deltaY));
         }
 
         private void ElementWatched_MouseUp(object sender, MouseButtonEventArgs e)
@@ -85,7 +87,8 @@ namespace VideoEditorWPF
             Mouse.Capture(elementWatched, CaptureMode.None);
 
             //Fire the drag stopped event
-            DragReleased(new DragEventArgs(buttonClicked, 0, 0));
+            if (DragReleased != null)
+                DragReleased(new DragEventArgs(buttonClicked, 0, 0));
         }
     }
 

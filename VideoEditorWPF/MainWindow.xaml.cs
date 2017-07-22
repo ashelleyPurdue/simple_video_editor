@@ -20,12 +20,16 @@ namespace VideoEditorWPF
 	/// </summary>
 	public partial class MainWindow : Window
 	{
-		private bool isPanning = false;
-		private double prevPanPos;
+        private MouseDragMonitor timelinePanWatcher;
+
 
 		public MainWindow()
 		{
 			InitializeComponent();
+
+            //Subscribe to the timeline pan watcher so we can be informed when the user pans
+            timelinePanWatcher = new MouseDragMonitor(timelineView);
+            timelinePanWatcher.DragMoved += TimelinePanWatcher_DragMoved;
 
             //Set up the timeline view
             TimelineLayerView layerA = new TimelineLayerView();
@@ -41,42 +45,11 @@ namespace VideoEditorWPF
             timelineView.AddLayer(layerB);
         }
 
-		private void timelineView_MouseDown(object sender, MouseButtonEventArgs e)
-		{
-			if (e.ChangedButton == MouseButton.Middle)
-			{
-                //Capture the mouse, so things don't break if the user drags out of the border
-                Mouse.Capture(timelineView, CaptureMode.Element);
-
-                //Start panning
-				isPanning = true;
-				prevPanPos = e.GetPosition(timelineView).X;
-			}
-		}
-
-		private void timelineView_MouseMove(object sender, MouseEventArgs e)
-		{
-			if (isPanning)
-			{
-				//Compute the delta pos
-				double currPanPos = e.GetPosition(timelineView).X;
-				double delta = currPanPos - prevPanPos;
-				prevPanPos = currPanPos;
-
-				//Pan it by the delta
-				timelineView.Pan += delta;
-			}
-		}
-
-		private void timelineView_MouseUp(object sender, MouseButtonEventArgs e)
-		{
-			if (e.ChangedButton == MouseButton.Middle)
-			{
-                //Stop panning
-                Mouse.Capture(timelineView, CaptureMode.None);
-				isPanning = false;
-			}
-		}
+        private void TimelinePanWatcher_DragMoved(DragEventArgs args)
+        {
+            //Pan the timeline by the amount the mouse moved
+            timelineView.Pan += args.deltaX;
+        }
 
 		private void timelineView_MouseWheel(object sender, MouseWheelEventArgs e)
 		{
