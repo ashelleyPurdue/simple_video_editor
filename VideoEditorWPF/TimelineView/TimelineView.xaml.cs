@@ -378,7 +378,7 @@ namespace VideoEditorWPF
                 Thickness rectMargin = previewRect.Margin;
 
                 rectMargin.Top = layer.Margin.Top;
-                rectMargin.Left = e.GetPosition(this).X;
+                rectMargin.Left = e.GetPosition(this).X - Pan;
 
                 previewRect.Margin = rectMargin;
             }
@@ -397,7 +397,7 @@ namespace VideoEditorWPF
 
             //Move the preview rectangle
             Thickness rectMargin = previewRect.Margin;
-            rectMargin.Left = e.GetPosition(this).X;
+            rectMargin.Left = e.GetPosition(this).X - Pan;
             previewRect.Margin = rectMargin;
         }
 
