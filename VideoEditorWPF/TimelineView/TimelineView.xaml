@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:VideoEditorWPF"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="489.076">
-    <Grid>
+    <Grid x:Name="grid">
         <ScrollViewer IsHitTestVisible="True" Margin="0,30,0,0" Template="{DynamicResource DarkScrollViewerControlTemplate}" Background="#FF1E1E1E">
             <Grid x:Name="layerGrid"/>
         </ScrollViewer>
@@ -14,6 +14,6 @@
             <Rectangle x:Name="scrubHandle" Fill="#FF686868" HorizontalAlignment="Left" Height="26" Margin="0" VerticalAlignment="Top" Width="11" SnapsToDevicePixels="True" ClipToBounds="True" MouseDown="scrubHandle_MouseDown" MouseMove="scrubHandle_MouseMove" MouseUp="scrubHandle_MouseUp" Cursor="SizeWE"/>
         </Grid>
         <Rectangle x:Name="scrubberRedLine" HorizontalAlignment="Left" IsHitTestVisible="False" Width="1" Fill="#FFC72020" Margin="0,0,0,0"/>
-
+        <Rectangle x:Name="previewRect" HorizontalAlignment="Left" IsHitTestVisible="False" Width="42" Margin="-69,47,0,188" Stroke="White"/>
     </Grid>
 </UserControl>
