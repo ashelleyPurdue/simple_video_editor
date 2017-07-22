@@ -19,15 +19,16 @@ namespace VideoEditorWPF
         public event DragEventHandler DragMoved;
         public event DragEventHandler DragReleased;
 
-        private MouseButton buttonClicked;
+        private MouseButton buttonWatched;
         private UIElement elementWatched;
 
         private bool isDragging = false;
         private Point prevMousePos;
 
-        public MouseDragMonitor(UIElement elementWatched)
+        public MouseDragMonitor(UIElement elementWatched, MouseButton buttonWatched)
         {
             this.elementWatched = elementWatched;
+            this.buttonWatched = buttonWatched;
 
             //Subscribe to the UIElement's mouse events
             elementWatched.MouseDown += ElementWatched_MouseDown;
@@ -41,15 +42,18 @@ namespace VideoEditorWPF
             if (isDragging)
                 return;
 
+            //Don't do anything if it's not the button we're paying attention to
+            if (e.ChangedButton != buttonWatched)
+                return;
+
             //Start dragging
             isDragging = true;
-            buttonClicked = e.ChangedButton;
             prevMousePos = e.GetPosition(elementWatched);
             Mouse.Capture(elementWatched, CaptureMode.Element);     //Capture the mouse so the user can safely drag the mouse out of the watched object's bounds
 
             //Send the drag started event
             if (DragStarted != null)
-                DragStarted(new DragEventArgs(buttonClicked, 0, 0));
+                DragStarted(new DragEventArgs(buttonWatched, 0, 0));
         }
 
         private void ElementWatched_MouseMove(object sender, MouseEventArgs e)
@@ -69,7 +73,7 @@ namespace VideoEditorWPF
 
             //Fire the drag moved event
             if (DragMoved != null)
-                DragMoved(new DragEventArgs(buttonClicked, deltaX, deltaY));
+                DragMoved(new DragEventArgs(buttonWatched, deltaX, deltaY));
         }
 
         private void ElementWatched_MouseUp(object sender, MouseButtonEventArgs e)
@@ -78,8 +82,8 @@ namespace VideoEditorWPF
             if (!isDragging)
                 return;
 
-            //Don't go on if the wrong button was released.  We only want to stop dragging if the button that was originally clicked releases.
-            if (e.ChangedButton != buttonClicked)
+            //Don't go on if the wrong button was released.
+            if (e.ChangedButton != buttonWatched)
                 return;
 
             //Stop dragging
@@ -88,7 +92,7 @@ namespace VideoEditorWPF
 
             //Fire the drag stopped event
             if (DragReleased != null)
-                DragReleased(new DragEventArgs(buttonClicked, 0, 0));
+                DragReleased(new DragEventArgs(buttonWatched, 0, 0));
         }
     }
 

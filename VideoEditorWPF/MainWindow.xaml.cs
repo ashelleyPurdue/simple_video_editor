@@ -28,7 +28,7 @@ namespace VideoEditorWPF
 			InitializeComponent();
 
             //Subscribe to the timeline pan watcher so we can be informed when the user pans
-            timelinePanWatcher = new MouseDragMonitor(timelineView);
+            timelinePanWatcher = new MouseDragMonitor(timelineView, MouseButton.Middle);
             timelinePanWatcher.DragMoved += TimelinePanWatcher_DragMoved;
 
             //Set up the timeline view
