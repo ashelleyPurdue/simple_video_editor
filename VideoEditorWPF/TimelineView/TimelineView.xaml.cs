@@ -106,6 +106,8 @@ namespace VideoEditorWPF
         private bool isDraggingEvent = false;
         private decimal eventDragClickTime = 0;     //The time in the timeline that the user clicked when they started dragging.
 
+        private double previewRectPrevDragPos = 0;
+
         private TimelineEvent eventDragged = null;
         #endregion
 
@@ -362,6 +364,7 @@ namespace VideoEditorWPF
                 //Start dragging
                 eventDragged = eventClicked;
                 eventDragClickTime = timeClicked;
+                previewRectPrevDragPos = e.GetPosition(this).X;
                 isDraggingEvent = true;
 
                 Mouse.Capture(layer, CaptureMode.Element);
@@ -378,7 +381,7 @@ namespace VideoEditorWPF
                 Thickness rectMargin = previewRect.Margin;
 
                 rectMargin.Top = layer.Margin.Top;
-                rectMargin.Left = e.GetPosition(this).X - Pan;
+                rectMargin.Left = (double)eventClicked.startTime * ScaleFactor;
 
                 previewRect.Margin = rectMargin;
             }
@@ -395,9 +398,13 @@ namespace VideoEditorWPF
                 return;
             }
 
+            //Get the delta x so we can move the preview rectangle by it
+            double deltaX = e.GetPosition(this).X - previewRectPrevDragPos;
+            previewRectPrevDragPos = e.GetPosition(this).X;
+
             //Move the preview rectangle
             Thickness rectMargin = previewRect.Margin;
-            rectMargin.Left = e.GetPosition(this).X - Pan;
+            rectMargin.Left += deltaX;
             previewRect.Margin = rectMargin;
         }
 
