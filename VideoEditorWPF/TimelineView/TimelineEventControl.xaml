@@ -6,6 +6,9 @@
              xmlns:local="clr-namespace:VideoEditorWPF"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-    
-    <Rectangle x:Name="visibleRectangle" Fill="#FF999999" Stroke="Black" SnapsToDevicePixels="True"/>
+    <Grid>
+        <Rectangle x:Name="visibleRectangle" Fill="#FF999999" SnapsToDevicePixels="True"/>
+        <Rectangle x:Name="leftHandle" Fill="#FF4B4B4B" HorizontalAlignment="Left" Height="300" Width="3" />
+        <Rectangle x:Name="rightHandle" Fill="#FF4B4B4B" HorizontalAlignment="Right" Height="300" Width="3"/>
+    </Grid>
 </UserControl>
