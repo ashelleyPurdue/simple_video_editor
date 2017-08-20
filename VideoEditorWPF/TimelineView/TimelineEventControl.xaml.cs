@@ -20,7 +20,13 @@ namespace VideoEditorWPF
 	/// </summary>
 	public partial class TimelineEventControl : UserControl
 	{
-		public TimelineEvent timelineEvent { get; private set; }
+        #region subscribable events
+        public delegate void UserResizeHandler(double startTime, double endTime);
+        public event UserResizeHandler UserResized;
+
+        #endregion
+
+        public TimelineEvent timelineEvent { get; private set; }
 
 		public TimelineEventControl(TimelineEvent timelineEvent)
 		{
