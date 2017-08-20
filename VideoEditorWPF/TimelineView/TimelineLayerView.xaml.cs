@@ -65,13 +65,13 @@ namespace VideoEditorWPF
 			timelineEvents.Add(timelineEvent);
 
 			//Create a control for this event
-			TimelineEventControl eventControl = new TimelineEventControl(timelineEvent);
+			TimelineEventControl eventControl = new TimelineEventControl(timelineEvent, this);
 			eventControls.Add(timelineEvent, eventControl);
 
 			eventsCanvas.Children.Add(eventControl);
 
             //Position the control
-            UpdateEventControl(eventControl);
+            eventControl.UpdateInterface();
 		}
 
 		/// <summary>
@@ -130,27 +130,9 @@ namespace VideoEditorWPF
 			//Position every control
 			foreach (TimelineEventControl eventControl in eventControls.Values)
 			{
-                UpdateEventControl(eventControl);
+                eventControl.UpdateInterface();
 			}
 		}
-
-
-        //Misc methods
-
-        /// <summary>
-        /// Positions the given control
-        /// </summary>
-        /// <param name="eventControl"></param>
-        private void UpdateEventControl(TimelineEventControl eventControl)
-        {
-            //Set the position
-            Canvas.SetLeft(eventControl, eventControl.timelineEvent.startTime * ScaleFactor);
-            Canvas.SetTop(eventControl, 0);
-
-            //Set the size
-            eventControl.Width = (eventControl.timelineEvent.endTime - eventControl.timelineEvent.startTime) * ScaleFactor;
-            eventControl.Height = this.ActualHeight;
-        }
 	}
 
 }

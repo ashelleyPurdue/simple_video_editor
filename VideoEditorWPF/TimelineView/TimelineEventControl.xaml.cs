@@ -28,12 +28,15 @@ namespace VideoEditorWPF
 
         public TimelineEvent timelineEvent { get; private set; }
 
+        private TimelineLayerView parentView;
         private MouseDragMonitor leftHandleDragMonitor;
         private MouseDragMonitor rightHandleDragMonitor;
 
-		public TimelineEventControl(TimelineEvent timelineEvent)
+		public TimelineEventControl(TimelineEvent timelineEvent, TimelineLayerView parentView)
 		{
 			this.timelineEvent = timelineEvent;
+            this.parentView = parentView;
+
 			InitializeComponent();
 
             //Initialize the drag monitors
@@ -46,6 +49,22 @@ namespace VideoEditorWPF
             leftHandleDragMonitor.DragReleased += LeftHandleDragMonitor_DragReleased;
             rightHandleDragMonitor.DragReleased += RightHandleDragMonitor_DragReleased;
 		}
+
+        /// <summary>
+        /// Updates the control to match the start/end times
+        /// </summary>
+        public void UpdateInterface()
+        {
+            //Update the size based on the start/end points
+
+            //Set the position
+            Canvas.SetLeft(this, timelineEvent.startTime * parentView.ScaleFactor);
+            Canvas.SetTop(this, 0);
+
+            //Set the size
+            Width = (timelineEvent.endTime - timelineEvent.startTime) * parentView.ScaleFactor;
+            Height = parentView.ActualHeight;
+        }
 
         #region handle drag events
         private void LeftHandleDragMonitor_DragMoved(DragEventArgs args)

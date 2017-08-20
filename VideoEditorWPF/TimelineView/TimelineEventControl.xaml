@@ -8,7 +8,7 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
         <Rectangle x:Name="visibleRectangle" Fill="#FF999999" SnapsToDevicePixels="True"/>
-        <Rectangle x:Name="leftHandle" Fill="#FF4B4B4B" HorizontalAlignment="Left" Height="300" Width="3" />
-        <Rectangle x:Name="rightHandle" Fill="#FF4B4B4B" HorizontalAlignment="Right" Height="300" Width="3"/>
+        <Rectangle x:Name="leftHandle" Fill="#FF4B4B4B" HorizontalAlignment="Left" Height="300" Width="3" Cursor="SizeWE" />
+        <Rectangle x:Name="rightHandle" Fill="#FF4B4B4B" HorizontalAlignment="Right" Height="300" Width="3" Cursor="SizeWE"/>
     </Grid>
 </UserControl>
