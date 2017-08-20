@@ -46,6 +46,10 @@ namespace VideoEditorWPF
 
         #endregion
 
+        #region subscribable events
+        public event UserResizeHandler eventResized;    //Fires when the user tries to resize this event
+        #endregion
+
         //The height of each layer
         public double LayerHeight
         {
@@ -146,9 +150,17 @@ namespace VideoEditorWPF
 
             //Subscribe to the layer's events.
             layer.SizeChanged += layer_SizeChanged;
+            layer.eventResized += layer_eventResized;
 
             //Update this layer
             UpdateLayer(layer);
+        }
+
+        private void layer_eventResized(TimelineEventControl sender, double startTime, double endTime)
+        {
+            //Bubble the event up
+            if (eventResized != null)
+                eventResized(sender, startTime, endTime);
         }
 
 

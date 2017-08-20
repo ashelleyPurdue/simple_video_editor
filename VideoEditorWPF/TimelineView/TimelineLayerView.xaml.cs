@@ -39,6 +39,10 @@ namespace VideoEditorWPF
         }
         #endregion
 
+        #region subscribable events
+        public event UserResizeHandler eventResized;
+        #endregion
+
         public int NumEvents { get { return timelineEvents.Count; } }
 
         private TranslateTransform canvasPan = new TranslateTransform();
@@ -72,13 +76,16 @@ namespace VideoEditorWPF
 
             //Position the control
             eventControl.UpdateInterface();
+
+            //Subscribe to the control's events
+            eventControl.UserResized += EventControl_UserResized;
 		}
 
-		/// <summary>
-		/// Removes an event from the timeline
-		/// </summary>
-		/// <param name="timelineEvent"></param>
-		public void RemoveEvent(TimelineEvent timelineEvent)
+        /// <summary>
+        /// Removes an event from the timeline
+        /// </summary>
+        /// <param name="timelineEvent"></param>
+        public void RemoveEvent(TimelineEvent timelineEvent)
 		{
 			//Don't go on if that event doesn't exist
 			if (!timelineEvents.Contains(timelineEvent))
@@ -94,6 +101,9 @@ namespace VideoEditorWPF
 
 			eventControls.Remove(timelineEvent);
 			eventsCanvas.Children.Remove(eventControl);
+
+            //Unsubscribe from events
+            eventControl.UserResized -= EventControl_UserResized;
 		}
 
         public TimelineEvent GetEvent(int index)
@@ -133,6 +143,13 @@ namespace VideoEditorWPF
                 eventControl.UpdateInterface();
 			}
 		}
-	}
+
+        private void EventControl_UserResized(TimelineEventControl sender, double startTime, double endTime)
+        {
+            //Bubble up the event to the parent
+            if (eventResized != null)
+                eventResized(sender, startTime, endTime);
+        }
+    }
 
 }
