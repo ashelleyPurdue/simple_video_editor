@@ -79,12 +79,28 @@ namespace VideoEditorWPF
 
         private void RightHandleDragMonitor_DragReleased(DragEventArgs args)
         {
-            throw new NotImplementedException();
+            //Reset the layout
+            UpdateInterface();
+
+            //Send the event
+            double mouseX = Mouse.GetPosition(null).X;
+            double endTime = IPannableZoomableUtils.GlobalToLocalPos(mouseX, parentLayerView);
+
+            if (UserResized != null)
+                UserResized(timelineEvent.startTime, endTime);
         }
 
         private void LeftHandleDragMonitor_DragReleased(DragEventArgs args)
         {
-            throw new NotImplementedException();
+            //Reset the layout
+            UpdateInterface();
+
+            //Send the event
+            double mouseX = Mouse.GetPosition(null).X;
+            double startTime = IPannableZoomableUtils.GlobalToLocalPos(mouseX, parentLayerView);
+
+            if (UserResized != null)
+                UserResized(startTime, timelineEvent.endTime);
         }
         #endregion
     }
