@@ -28,10 +28,45 @@ namespace VideoEditorWPF
 
         public TimelineEvent timelineEvent { get; private set; }
 
+        private MouseDragMonitor leftHandleDragMonitor;
+        private MouseDragMonitor rightHandleDragMonitor;
+
 		public TimelineEventControl(TimelineEvent timelineEvent)
 		{
 			this.timelineEvent = timelineEvent;
 			InitializeComponent();
+
+            //Initialize the drag monitors
+            leftHandleDragMonitor = new MouseDragMonitor(leftHandle, MouseButton.Left);
+            rightHandleDragMonitor = new MouseDragMonitor(rightHandle, MouseButton.Left);
+
+            leftHandleDragMonitor.DragMoved += LeftHandleDragMonitor_DragMoved;
+            rightHandleDragMonitor.DragMoved += RightHandleDragMonitor_DragMoved;
+
+            leftHandleDragMonitor.DragReleased += LeftHandleDragMonitor_DragReleased;
+            rightHandleDragMonitor.DragReleased += RightHandleDragMonitor_DragReleased;
 		}
-	}
+
+        #region handle drag events
+        private void LeftHandleDragMonitor_DragMoved(DragEventArgs args)
+        {
+            // TODO: Update the graphics to go with the new width
+        }
+
+        private void RightHandleDragMonitor_DragMoved(DragEventArgs args)
+        {
+            // TODO: Update the graphics to go with the new width
+        }
+
+        private void RightHandleDragMonitor_DragReleased(DragEventArgs args)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void LeftHandleDragMonitor_DragReleased(DragEventArgs args)
+        {
+            throw new NotImplementedException();
+        }
+        #endregion
+    }
 }
