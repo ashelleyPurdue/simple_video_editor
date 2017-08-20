@@ -46,14 +46,6 @@ namespace VideoEditorWPF
 
         #endregion
 
-        #region subscribable events
-
-        public delegate void EventMovedHandler(TimelineEvent timelineEvent, double newStartTime);
-
-        public event EventMovedHandler eventMoved;      //Raised after the user drags and drops an event to a new location
-
-        #endregion
-
         //The height of each layer
         public double LayerHeight
         {
