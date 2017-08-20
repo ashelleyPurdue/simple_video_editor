@@ -94,9 +94,6 @@ namespace VideoEditorWPF
         }
         private double m_selectedTime = 0;
 
-        private bool isDraggingScrubber = false;
-        private double scrubberPrevDragPos = 0;
-
         private MouseDragMonitor scrubberDragMonitor;
 
         private double scrubberTargetTime = 0;   //Used for snapping the scrubber to the beginning/ending of timeline events while dragging
@@ -112,10 +109,6 @@ namespace VideoEditorWPF
             scrubberDragMonitor = new MouseDragMonitor(scrubHandle, MouseButton.Left);
             scrubberDragMonitor.DragStarted += scrubHandle_DragStarted;
             scrubberDragMonitor.DragMoved += scrubHandle_DragMoved;
-
-            //Make it so the preview rectangle starts out with no parent
-            //TODO: Find a cleaner way to do this.
-            grid.Children.Remove(previewRect);
         }
 
         public void AddLayer(TimelineLayerView layer)
