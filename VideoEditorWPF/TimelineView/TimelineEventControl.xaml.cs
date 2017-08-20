@@ -15,13 +15,14 @@ using System.Windows.Shapes;
 
 namespace VideoEditorWPF
 {
-	/// <summary>
-	/// Interaction logic for TimelineEventControl.xaml
-	/// </summary>
-	public partial class TimelineEventControl : UserControl
+    public delegate void UserResizeHandler(TimelineEventControl sender, double startTime, double endTime);
+
+    /// <summary>
+    /// Interaction logic for TimelineEventControl.xaml
+    /// </summary>
+    public partial class TimelineEventControl : UserControl
 	{
         #region subscribable events
-        public delegate void UserResizeHandler(double startTime, double endTime);
         public event UserResizeHandler UserResized;
 
         #endregion
@@ -87,7 +88,7 @@ namespace VideoEditorWPF
             double endTime = IPannableZoomableUtils.GlobalToLocalPos(mouseX, parentLayerView);
 
             if (UserResized != null)
-                UserResized(timelineEvent.startTime, endTime);
+                UserResized(this, timelineEvent.startTime, endTime);
         }
 
         private void LeftHandleDragMonitor_DragReleased(DragEventArgs args)
@@ -100,7 +101,7 @@ namespace VideoEditorWPF
             double startTime = IPannableZoomableUtils.GlobalToLocalPos(mouseX, parentLayerView);
 
             if (UserResized != null)
-                UserResized(startTime, timelineEvent.endTime);
+                UserResized(this, startTime, timelineEvent.endTime);
         }
         #endregion
     }
