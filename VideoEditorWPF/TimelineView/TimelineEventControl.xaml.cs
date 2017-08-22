@@ -23,8 +23,8 @@ namespace VideoEditorWPF
     public partial class TimelineEventControl : UserControl
 	{
         #region subscribable events
-        public event UserResizeHandler UserResized;
-
+        public event UserResizeHandler UserResized;     // Called when the user attempts to resize this event
+        public event UserResizeHandler UserMoved;       // Called when the user tries to move this event
         #endregion
 
         public TimelineEvent timelineEvent { get; private set; }
@@ -70,12 +70,19 @@ namespace VideoEditorWPF
         #region handle drag events
         private void LeftHandleDragMonitor_DragMoved(DragEventArgs args)
         {
-            // TODO: Update the graphics to go with the new width
+            // Update the graphics to go with the new width
+            Width -= args.deltaX;
+
+            double leftOffset = Canvas.GetLeft(this);
+            leftOffset += args.deltaX;
+
+            Canvas.SetLeft(this, leftOffset);
         }
 
         private void RightHandleDragMonitor_DragMoved(DragEventArgs args)
         {
-            // TODO: Update the graphics to go with the new width
+            // Update the graphics to go with the new width
+            Width += args.deltaX;
         }
 
         private void RightHandleDragMonitor_DragReleased(DragEventArgs args)
