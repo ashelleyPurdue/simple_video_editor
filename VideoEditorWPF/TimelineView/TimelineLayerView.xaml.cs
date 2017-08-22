@@ -39,6 +39,10 @@ namespace VideoEditorWPF
         }
         #endregion
 
+        #region subscribable events
+        public event UserResizeHandler eventResized;
+        #endregion
+
         public int NumEvents { get { return timelineEvents.Count; } }
 
         private TranslateTransform canvasPan = new TranslateTransform();
@@ -65,20 +69,23 @@ namespace VideoEditorWPF
 			timelineEvents.Add(timelineEvent);
 
 			//Create a control for this event
-			TimelineEventControl eventControl = new TimelineEventControl(timelineEvent);
+			TimelineEventControl eventControl = new TimelineEventControl(timelineEvent, this);
 			eventControls.Add(timelineEvent, eventControl);
 
 			eventsCanvas.Children.Add(eventControl);
 
             //Position the control
-            UpdateEventControl(eventControl);
+            eventControl.UpdateInterface();
+
+            //Subscribe to the control's events
+            eventControl.UserResized += EventControl_UserResized;
 		}
 
-		/// <summary>
-		/// Removes an event from the timeline
-		/// </summary>
-		/// <param name="timelineEvent"></param>
-		public void RemoveEvent(TimelineEvent timelineEvent)
+        /// <summary>
+        /// Removes an event from the timeline
+        /// </summary>
+        /// <param name="timelineEvent"></param>
+        public void RemoveEvent(TimelineEvent timelineEvent)
 		{
 			//Don't go on if that event doesn't exist
 			if (!timelineEvents.Contains(timelineEvent))
@@ -94,6 +101,9 @@ namespace VideoEditorWPF
 
 			eventControls.Remove(timelineEvent);
 			eventsCanvas.Children.Remove(eventControl);
+
+            //Unsubscribe from events
+            eventControl.UserResized -= EventControl_UserResized;
 		}
 
         public TimelineEvent GetEvent(int index)
@@ -130,27 +140,16 @@ namespace VideoEditorWPF
 			//Position every control
 			foreach (TimelineEventControl eventControl in eventControls.Values)
 			{
-                UpdateEventControl(eventControl);
+                eventControl.UpdateInterface();
 			}
 		}
 
-
-        //Misc methods
-
-        /// <summary>
-        /// Positions the given control
-        /// </summary>
-        /// <param name="eventControl"></param>
-        private void UpdateEventControl(TimelineEventControl eventControl)
+        private void EventControl_UserResized(TimelineEventControl sender, double startTime, double endTime)
         {
-            //Set the position
-            Canvas.SetLeft(eventControl, eventControl.timelineEvent.startTime * ScaleFactor);
-            Canvas.SetTop(eventControl, 0);
-
-            //Set the size
-            eventControl.Width = (eventControl.timelineEvent.endTime - eventControl.timelineEvent.startTime) * ScaleFactor;
-            eventControl.Height = this.ActualHeight;
+            //Bubble up the event to the parent
+            if (eventResized != null)
+                eventResized(sender, startTime, endTime);
         }
-	}
+    }
 
 }

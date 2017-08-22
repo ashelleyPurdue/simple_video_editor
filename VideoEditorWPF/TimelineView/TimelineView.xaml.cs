@@ -47,11 +47,7 @@ namespace VideoEditorWPF
         #endregion
 
         #region subscribable events
-
-        public delegate void EventMovedHandler(TimelineEvent timelineEvent, double newStartTime);
-
-        public event EventMovedHandler eventMoved;      //Raised after the user drags and drops an event to a new location
-
+        public event UserResizeHandler eventResized;    //Fires when the user tries to resize this event
         #endregion
 
         //The height of each layer
@@ -94,23 +90,10 @@ namespace VideoEditorWPF
         }
         private double m_selectedTime = 0;
 
-        private bool isDraggingScrubber = false;
-        private double scrubberPrevDragPos = 0;
-
         private MouseDragMonitor scrubberDragMonitor;
 
         private double scrubberTargetTime = 0;   //Used for snapping the scrubber to the beginning/ending of timeline events while dragging
 
-        #endregion
-
-        #region TimelineEvent moving fields
-
-        private bool isDraggingEvent = false;
-        private double eventDragClickTime = 0;     //The time in the timeline that the user clicked when they started dragging.
-
-        private double previewRectPrevDragPos = 0;
-
-        private TimelineEvent eventDragged = null;
         #endregion
 
 
@@ -122,10 +105,6 @@ namespace VideoEditorWPF
             scrubberDragMonitor = new MouseDragMonitor(scrubHandle, MouseButton.Left);
             scrubberDragMonitor.DragStarted += scrubHandle_DragStarted;
             scrubberDragMonitor.DragMoved += scrubHandle_DragMoved;
-
-            //Make it so the preview rectangle starts out with no parent
-            //TODO: Find a cleaner way to do this.
-            grid.Children.Remove(previewRect);
         }
 
         public void AddLayer(TimelineLayerView layer)
@@ -171,12 +150,17 @@ namespace VideoEditorWPF
 
             //Subscribe to the layer's events.
             layer.SizeChanged += layer_SizeChanged;
-            layer.MouseDown += layer_MouseDown;
-            layer.MouseMove += layer_MouseMove;
-            layer.MouseUp += layer_MouseUp;
+            layer.eventResized += layer_eventResized;
 
             //Update this layer
             UpdateLayer(layer);
+        }
+
+        private void layer_eventResized(TimelineEventControl sender, double startTime, double endTime)
+        {
+            //Bubble the event up
+            if (eventResized != null)
+                eventResized(sender, startTime, endTime);
         }
 
 
@@ -316,112 +300,6 @@ namespace VideoEditorWPF
         {
             //Update the layer that was changed
             TimelineLayerView layer = (TimelineLayerView)sender;
-            layer.UpdateInterface();
-        }
-
-        private void layer_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            TimelineLayerView layer = (TimelineLayerView)sender;
-
-            //TODO: Rewrite this to use MouseDragMonitor
-
-            //Don't go on unless it's a left click
-            if (e.ChangedButton != MouseButton.Left)
-            {
-                return;
-            }
-
-            //Check if we're clicking on an event
-            double timeClicked = IPannableZoomableUtils.GlobalToLocalPos(e.GetPosition(this).X, layer);
-            TimelineEvent eventClicked = layer.GetEventAt(timeClicked);
-
-            //If we clicked on an event, start dragging it
-            if (eventClicked != null)
-            {
-                //Start dragging
-                eventDragged = eventClicked;
-                eventDragClickTime = timeClicked;
-                previewRectPrevDragPos = e.GetPosition(this).X;
-                isDraggingEvent = true;
-
-                Mouse.Capture(layer, CaptureMode.Element);
-
-                //Show the preview rectangle
-                previewRect.Visibility = Visibility.Visible;
-                layer.eventsCanvas.Children.Add(previewRect);
-
-                //Set the preview rectangle's size
-                previewRect.Height = layer.ActualHeight;
-                previewRect.Width = (eventClicked.endTime - eventClicked.startTime) * ScaleFactor;
-
-                //Set the preview rectangle's position
-                Thickness rectMargin = previewRect.Margin;
-
-                rectMargin.Top = layer.Margin.Top;
-                rectMargin.Left = eventClicked.startTime * ScaleFactor;
-
-                previewRect.Margin = rectMargin;
-            }
-
-        }
-
-        private void layer_MouseMove(object sender, MouseEventArgs e)
-        {
-            TimelineLayerView layer = (TimelineLayerView)sender;
-
-            //Skip if we're not dragging an event
-            if (!isDraggingEvent)
-            {
-                return;
-            }
-
-            //Get the delta x so we can move the preview rectangle by it
-            double deltaX = e.GetPosition(this).X - previewRectPrevDragPos;
-            previewRectPrevDragPos = e.GetPosition(this).X;
-
-            //Move the preview rectangle
-            Thickness rectMargin = previewRect.Margin;
-            rectMargin.Left += deltaX;
-            previewRect.Margin = rectMargin;
-        }
-
-        private void layer_MouseUp(object sender, MouseButtonEventArgs e)
-        {
-            TimelineLayerView layer = (TimelineLayerView)sender;
-
-            //Don't go on if it's not the left button
-            if (e.ChangedButton != MouseButton.Left)
-            {
-                return;
-            }
-
-            //Don't go on if we're not dragging an event
-            if (!isDraggingEvent)
-            {
-                return;
-            }
-
-            //Calculate the new start time for the event
-            double timeDropped = IPannableZoomableUtils.GlobalToLocalPos(e.GetPosition(this).X, layer);
-            double deltaTime = timeDropped - eventDragClickTime;
-            double newStartTime = eventDragged.startTime + deltaTime;
-
-            //Raise the eventMoved event
-            if (eventMoved != null)
-            {
-                eventMoved(eventDragged, newStartTime);
-            }
-
-            //Stop dragging
-            isDraggingEvent = false;
-            Mouse.Capture(layer, CaptureMode.None);
-            eventDragged = null;
-
-            //Hide the preview rectangle
-            previewRect.Visibility = Visibility.Collapsed;
-            layer.eventsCanvas.Children.Remove(previewRect);
-
-            //Update the layer
             layer.UpdateInterface();
         }
     }

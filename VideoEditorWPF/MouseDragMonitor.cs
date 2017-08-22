@@ -24,6 +24,7 @@ namespace VideoEditorWPF
 
         private bool isDragging = false;
         private Point prevMousePos;
+        private Point totalMouseDelta;
 
         public MouseDragMonitor(UIElement elementWatched, MouseButton buttonWatched)
         {
@@ -49,11 +50,13 @@ namespace VideoEditorWPF
             //Start dragging
             isDragging = true;
             prevMousePos = e.GetPosition(null);
+            totalMouseDelta = new Point(0, 0);
+
             Mouse.Capture(elementWatched, CaptureMode.Element);     //Capture the mouse so the user can safely drag the mouse out of the watched object's bounds
 
             //Send the drag started event
             if (DragStarted != null)
-                DragStarted(new DragEventArgs(buttonWatched, 0, 0));
+                DragStarted(new DragEventArgs(buttonWatched, 0, 0, 0, 0));
         }
 
         private void ElementWatched_MouseMove(object sender, MouseEventArgs e)
@@ -68,12 +71,15 @@ namespace VideoEditorWPF
             double deltaX = currentMousePos.X - prevMousePos.X;
             double deltaY = currentMousePos.Y - prevMousePos.Y;
 
+            totalMouseDelta.X += deltaX;
+            totalMouseDelta.Y += deltaY;
+
             //Save the current mouse pos as the previous one, so we can compute the delta again next time
             prevMousePos = currentMousePos;
 
             //Fire the drag moved event
             if (DragMoved != null)
-                DragMoved(new DragEventArgs(buttonWatched, deltaX, deltaY));
+                DragMoved(new DragEventArgs(buttonWatched, deltaX, deltaY, totalMouseDelta.X, totalMouseDelta.Y));
         }
 
         private void ElementWatched_MouseUp(object sender, MouseButtonEventArgs e)
@@ -92,21 +98,29 @@ namespace VideoEditorWPF
 
             //Fire the drag stopped event
             if (DragReleased != null)
-                DragReleased(new DragEventArgs(buttonWatched, 0, 0));
+                DragReleased(new DragEventArgs(buttonWatched, 0, 0, totalMouseDelta.X, totalMouseDelta.Y));
         }
     }
 
     public class DragEventArgs
     {
         public MouseButton button;
+
         public double deltaX;
         public double deltaY;
 
-        public DragEventArgs(MouseButton button, double deltaX, double deltaY)
+        public double totalDeltaX;  //The total x movement since the user started dragging
+        public double totalDeltaY;  //The total y movement since the user started dragging
+
+        public DragEventArgs(MouseButton button, double deltaX, double deltaY, double totalDeltaX, double totalDeltaY)
         {
             this.button = button;
+
             this.deltaX = deltaX;
             this.deltaY = deltaY;
+
+            this.totalDeltaX = totalDeltaX;
+            this.totalDeltaY = totalDeltaY;
         }
     }
 }
