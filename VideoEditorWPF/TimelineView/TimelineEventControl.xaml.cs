@@ -70,19 +70,32 @@ namespace VideoEditorWPF
         #region handle drag events
         private void LeftHandleDragMonitor_DragMoved(DragEventArgs args)
         {
-            // Update the graphics to go with the new width
-            Width -= args.deltaX;
+            //Updates the graphics to go with the new width
 
+            //Shift the position
             double leftOffset = Canvas.GetLeft(this);
             leftOffset += args.deltaX;
 
             Canvas.SetLeft(this, leftOffset);
+
+            //Adjust the width
+            double newWidth = Width - args.deltaX;
+            if (newWidth < 0)
+                newWidth = 0;
+
+            Width = newWidth;
         }
 
         private void RightHandleDragMonitor_DragMoved(DragEventArgs args)
         {
-            // Update the graphics to go with the new width
-            Width += args.deltaX;
+            //Updates the graphics to go with the new width
+
+            //Adjust the width
+            double newWidth = Width + args.deltaX;
+            if (newWidth < 0)
+                newWidth = 0;
+
+            Width = newWidth;
         }
 
         private void RightHandleDragMonitor_DragReleased(DragEventArgs args)

@@ -109,8 +109,8 @@ namespace VideoEditorWPF
         public double deltaX;
         public double deltaY;
 
-        public double totalDeltaX;  // The total x movement since the user started dragging
-        public double totalDeltaY;  // The total y movement since the user started dragging
+        public double totalDeltaX;  //The total x movement since the user started dragging
+        public double totalDeltaY;  //The total y movement since the user started dragging
 
         public DragEventArgs(MouseButton button, double deltaX, double deltaY, double totalDeltaX, double totalDeltaY)
         {
