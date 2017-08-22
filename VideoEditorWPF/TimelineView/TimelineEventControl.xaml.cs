@@ -104,8 +104,7 @@ namespace VideoEditorWPF
             UpdateInterface();
 
             //Send the event
-            double mouseX = Mouse.GetPosition(null).X;
-            double endTime = IPannableZoomableUtils.GlobalToLocalPos(mouseX, parentLayerView);
+            double endTime = timelineEvent.endTime + args.totalDeltaX / parentLayerView.ScaleFactor;
 
             if (UserResized != null)
                 UserResized(this, timelineEvent.startTime, endTime);
@@ -117,8 +116,7 @@ namespace VideoEditorWPF
             UpdateInterface();
 
             //Send the event
-            double mouseX = Mouse.GetPosition(null).X;
-            double startTime = IPannableZoomableUtils.GlobalToLocalPos(mouseX, parentLayerView);
+            double startTime = timelineEvent.startTime + args.totalDeltaX / parentLayerView.ScaleFactor;
 
             if (UserResized != null)
                 UserResized(this, startTime, timelineEvent.endTime);
