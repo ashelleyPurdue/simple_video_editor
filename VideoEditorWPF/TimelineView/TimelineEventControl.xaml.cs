@@ -32,6 +32,7 @@ namespace VideoEditorWPF
         private TimelineLayerView parentLayerView;
         private MouseDragMonitor leftHandleDragMonitor;
         private MouseDragMonitor rightHandleDragMonitor;
+        private MouseDragMonitor moveDragMonitor;
 
 		public TimelineEventControl(TimelineEvent timelineEvent, TimelineLayerView parentLayerView)
 		{
@@ -42,14 +43,19 @@ namespace VideoEditorWPF
 
             //Initialize the drag monitors
             leftHandleDragMonitor = new MouseDragMonitor(leftHandle, MouseButton.Left);
-            rightHandleDragMonitor = new MouseDragMonitor(rightHandle, MouseButton.Left);
-
             leftHandleDragMonitor.DragMoved += LeftHandleDragMonitor_DragMoved;
-            rightHandleDragMonitor.DragMoved += RightHandleDragMonitor_DragMoved;
-
             leftHandleDragMonitor.DragReleased += LeftHandleDragMonitor_DragReleased;
+
+            rightHandleDragMonitor = new MouseDragMonitor(rightHandle, MouseButton.Left);
+            rightHandleDragMonitor.DragMoved += RightHandleDragMonitor_DragMoved;
             rightHandleDragMonitor.DragReleased += RightHandleDragMonitor_DragReleased;
-		}
+
+            moveDragMonitor = new MouseDragMonitor(visibleRectangle, MouseButton.Left);
+            moveDragMonitor.DragMoved += MoveDragMonitor_DragMoved;
+            moveDragMonitor.DragReleased += MoveDragMonitor_DragReleased;
+        }
+
+
 
         /// <summary>
         /// Updates the control to match the start/end times
@@ -120,6 +126,19 @@ namespace VideoEditorWPF
 
             if (UserResized != null)
                 UserResized(this, startTime, timelineEvent.endTime);
+        }
+
+        private void MoveDragMonitor_DragMoved(DragEventArgs args)
+        {
+            // Update the graphics to go with the new position
+            double newLeft = Canvas.GetLeft(this) + args.deltaX;
+            Canvas.SetLeft(this, newLeft);
+        }
+
+        private void MoveDragMonitor_DragReleased(DragEventArgs args)
+        {
+            // TODO: Send the event
+            UpdateInterface();
         }
         #endregion
     }
