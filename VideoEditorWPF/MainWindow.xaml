@@ -7,6 +7,10 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="530.867" Width="766.763" Style="{DynamicResource DarkWindowStyle}">
     <Grid x:Name="grid">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="126*"/>
+            <ColumnDefinition Width="127*"/>
+        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="333*"/>
             <RowDefinition Height="167*"/>
@@ -15,9 +19,9 @@
                       VerticalAlignment="Bottom"
                       ResizeDirection="Rows"
                       ShowsPreview="True"
-                      Grid.Row="0" Style="{DynamicResource DarkGridSplitterStyle}"/>
-        <local:TimelineView x:Name="timelineView" Margin="10" MouseWheel="timelineView_MouseWheel" Grid.Row="1" entryResized="timelineView_entryResized"/>
-        <ToolBar VerticalAlignment="Top">
+                      Grid.Row="0" Style="{DynamicResource DarkGridSplitterStyle}" Grid.ColumnSpan="2"/>
+        <local:TimelineView x:Name="timelineView" Margin="10" MouseWheel="timelineView_MouseWheel" Grid.Row="1" entryResized="timelineView_entryResized" Grid.ColumnSpan="2"/>
+        <ToolBar VerticalAlignment="Top" Grid.ColumnSpan="2">
             <Menu VerticalAlignment="Top">
                 <MenuItem Header="Import">
                     <MenuItem x:Name="importVideoButton" Header="Video" Click="importVideoButton_Click"/>
@@ -25,8 +29,7 @@
             </Menu>
 
         </ToolBar>
-        <GroupBox Header="Imported Videos" HorizontalAlignment="Left" Height="299" Margin="10,23,0,0" VerticalAlignment="Top" Width="288" BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}" Foreground="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}">
-            <ListBox x:Name="importedVideosListbox" Margin="0"/>
-        </GroupBox>
+        <ListBox x:Name="importedVideosListbox" Margin="10,54,10,11" Background="#FF3E3E42" BorderBrush="{x:Null}"/>
+        <Label Content="Imported Videos" HorizontalAlignment="Left" Margin="10,28,0,0" VerticalAlignment="Top" Foreground="#FFC7C7C7" Background="{x:Null}"/>
     </Grid>
 </Window>
