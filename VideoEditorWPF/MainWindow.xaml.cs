@@ -69,7 +69,7 @@ namespace VideoEditorWPF
             if (startTime > endTime)
                 return;
 
-            //Resize the event
+            //Resize the entry
             sender.timelineEntry.startTime = startTime;
             sender.timelineEntry.endTime = endTime;
             sender.UpdateInterface();

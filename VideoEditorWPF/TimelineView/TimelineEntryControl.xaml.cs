@@ -18,12 +18,12 @@ namespace VideoEditorWPF
     public delegate void UserResizeHandler(TimelineEntryControl sender, double startTime, double endTime);
 
     /// <summary>
-    /// Interaction logic for TimelineEventControl.xaml
+    /// Interaction logic for TimelineEntryControl.xaml
     /// </summary>
     public partial class TimelineEntryControl : UserControl
 	{
         #region subscribable events
-        public event UserResizeHandler UserResized;     // Called when the user attempts to resize or move this event
+        public event UserResizeHandler UserResized;     // Called when the user attempts to resize or move this entry
         #endregion
 
         public TimelineEntry timelineEntry { get; private set; }
