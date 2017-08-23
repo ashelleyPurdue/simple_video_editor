@@ -29,7 +29,8 @@
             </Menu>
 
         </ToolBar>
-        <ListBox x:Name="importedVideosListbox" Margin="10,54,10,11" Background="#FF3E3E42" BorderBrush="{x:Null}"/>
+        <ListBox x:Name="importedVideosListbox" Margin="10,54,5,11" Background="#FF3E3E42" BorderBrush="{x:Null}"/>
         <Label Content="Imported Videos" HorizontalAlignment="Left" Margin="10,28,0,0" VerticalAlignment="Top" Foreground="#FFC7C7C7" Background="{x:Null}"/>
+        <GridSplitter HorizontalAlignment="Left" Width="6" ResizeDirection="Columns" ShowsPreview="True" Grid.Column="1" Margin="0,33,0,6" Background="#FF1E1E1E"/>
     </Grid>
 </Window>
