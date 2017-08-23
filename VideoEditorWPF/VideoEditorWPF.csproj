@@ -57,9 +57,9 @@
     </ApplicationDefinition>
     <Compile Include="MouseDragMonitor.cs" />
     <Compile Include="TimelineView\IPannableZoomable.cs" />
-    <Compile Include="TimelineView\TimelineEvent.cs" />
-    <Compile Include="TimelineView\TimelineEventControl.xaml.cs">
-      <DependentUpon>TimelineEventControl.xaml</DependentUpon>
+    <Compile Include="TimelineView\TimelineEntry.cs" />
+    <Compile Include="TimelineView\TimelineEntryControl.xaml.cs">
+      <DependentUpon>TimelineEntryControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="TimelineView\TimelineLayerView.xaml.cs">
       <DependentUpon>TimelineLayerView.xaml</DependentUpon>
@@ -79,7 +79,7 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="TimelineView\TimelineEventControl.xaml">
+    <Page Include="TimelineView\TimelineEntryControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

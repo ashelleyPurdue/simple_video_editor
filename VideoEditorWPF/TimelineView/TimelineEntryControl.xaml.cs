@@ -15,27 +15,27 @@ using System.Windows.Shapes;
 
 namespace VideoEditorWPF
 {
-    public delegate void UserResizeHandler(TimelineEventControl sender, double startTime, double endTime);
+    public delegate void UserResizeHandler(TimelineEntryControl sender, double startTime, double endTime);
 
     /// <summary>
-    /// Interaction logic for TimelineEventControl.xaml
+    /// Interaction logic for TimelineEntryControl.xaml
     /// </summary>
-    public partial class TimelineEventControl : UserControl
+    public partial class TimelineEntryControl : UserControl
 	{
         #region subscribable events
-        public event UserResizeHandler UserResized;     // Called when the user attempts to resize or move this event
+        public event UserResizeHandler UserResized;     // Called when the user attempts to resize or move this entry
         #endregion
 
-        public TimelineEvent timelineEvent { get; private set; }
+        public TimelineEntry timelineEntry { get; private set; }
 
         private TimelineLayerView parentLayerView;
         private MouseDragMonitor leftHandleDragMonitor;
         private MouseDragMonitor rightHandleDragMonitor;
         private MouseDragMonitor moveDragMonitor;
 
-		public TimelineEventControl(TimelineEvent timelineEvent, TimelineLayerView parentLayerView)
+		public TimelineEntryControl(TimelineEntry timelineEntry, TimelineLayerView parentLayerView)
 		{
-			this.timelineEvent = timelineEvent;
+			this.timelineEntry = timelineEntry;
             this.parentLayerView = parentLayerView;
 
 			InitializeComponent();
@@ -64,11 +64,11 @@ namespace VideoEditorWPF
             //Update the size based on the start/end points
 
             //Set the position
-            Canvas.SetLeft(this, timelineEvent.startTime * parentLayerView.ScaleFactor);
+            Canvas.SetLeft(this, timelineEntry.startTime * parentLayerView.ScaleFactor);
             Canvas.SetTop(this, 0);
 
             //Set the size
-            Width = (timelineEvent.endTime - timelineEvent.startTime) * parentLayerView.ScaleFactor;
+            Width = (timelineEntry.endTime - timelineEntry.startTime) * parentLayerView.ScaleFactor;
             Height = parentLayerView.ActualHeight;
         }
 
@@ -109,10 +109,10 @@ namespace VideoEditorWPF
             UpdateInterface();
 
             //Send the event
-            double endTime = timelineEvent.endTime + args.totalDeltaX / parentLayerView.ScaleFactor;
+            double endTime = timelineEntry.endTime + args.totalDeltaX / parentLayerView.ScaleFactor;
 
             if (UserResized != null)
-                UserResized(this, timelineEvent.startTime, endTime);
+                UserResized(this, timelineEntry.startTime, endTime);
         }
 
         private void LeftHandleDragMonitor_DragReleased(DragEventArgs args)
@@ -121,10 +121,10 @@ namespace VideoEditorWPF
             UpdateInterface();
 
             //Send the event
-            double startTime = timelineEvent.startTime + args.totalDeltaX / parentLayerView.ScaleFactor;
+            double startTime = timelineEntry.startTime + args.totalDeltaX / parentLayerView.ScaleFactor;
 
             if (UserResized != null)
-                UserResized(this, startTime, timelineEvent.endTime);
+                UserResized(this, startTime, timelineEntry.endTime);
         }
 
         private void MoveDragMonitor_DragMoved(DragEventArgs args)
@@ -142,8 +142,8 @@ namespace VideoEditorWPF
             //Find the new start and end times
             double scaledDelta = args.totalDeltaX / parentLayerView.ScaleFactor;
 
-            double startTime = timelineEvent.startTime + scaledDelta;
-            double endTime = timelineEvent.endTime + scaledDelta;
+            double startTime = timelineEntry.startTime + scaledDelta;
+            double endTime = timelineEntry.endTime + scaledDelta;
 
             //Send the event
             if (UserResized != null)

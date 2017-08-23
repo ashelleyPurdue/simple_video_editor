@@ -47,7 +47,7 @@ namespace VideoEditorWPF
         #endregion
 
         #region subscribable events
-        public event UserResizeHandler eventResized;    //Fires when the user tries to resize this event
+        public event UserResizeHandler entryResized;    //Fires when the user tries to resize this entry
         #endregion
 
         //The height of each layer
@@ -92,7 +92,7 @@ namespace VideoEditorWPF
 
         private MouseDragMonitor scrubberDragMonitor;
 
-        private double scrubberTargetTime = 0;   //Used for snapping the scrubber to the beginning/ending of timeline events while dragging
+        private double scrubberTargetTime = 0;   //Used for snapping the scrubber to the beginning/ending of timeline entries while dragging
 
         #endregion
 
@@ -150,17 +150,17 @@ namespace VideoEditorWPF
 
             //Subscribe to the layer's events.
             layer.SizeChanged += layer_SizeChanged;
-            layer.eventResized += layer_eventResized;
+            layer.entryResized += layer_entryResized;
 
             //Update this layer
             UpdateLayer(layer);
         }
 
-        private void layer_eventResized(TimelineEventControl sender, double startTime, double endTime)
+        private void layer_entryResized(TimelineEntryControl sender, double startTime, double endTime)
         {
             //Bubble the event up
-            if (eventResized != null)
-                eventResized(sender, startTime, endTime);
+            if (entryResized != null)
+                entryResized(sender, startTime, endTime);
         }
 
 
@@ -209,15 +209,15 @@ namespace VideoEditorWPF
 
             List<double> snapPoints = new List<double>();
 
-            //Add the beginnings/endings of all events
+            //Add the beginnings/endings of all entries
             foreach (TimelineLayerView layer in layers)
             {
-                for (int i = 0; i < layer.NumEvents; i++)
+                for (int i = 0; i < layer.NumEntries; i++)
                 {
-                    TimelineEvent timelineEvent = layer.GetEvent(i);
+                    TimelineEntry timelineEntry = layer.GetEntry(i);
 
-                    snapPoints.Add(timelineEvent.startTime);
-                    snapPoints.Add(timelineEvent.endTime);
+                    snapPoints.Add(timelineEntry.startTime);
+                    snapPoints.Add(timelineEntry.endTime);
                 }
             }
 

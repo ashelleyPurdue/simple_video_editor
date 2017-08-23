@@ -40,15 +40,15 @@ namespace VideoEditorWPF
         #endregion
 
         #region subscribable events
-        public event UserResizeHandler eventResized;
+        public event UserResizeHandler entryResized;
         #endregion
 
-        public int NumEvents { get { return timelineEvents.Count; } }
+        public int NumEntries { get { return timelineEntries.Count; } }
 
         private TranslateTransform canvasPan = new TranslateTransform();
 
-		private List<TimelineEvent> timelineEvents = new List<TimelineEvent>();
-		private Dictionary<TimelineEvent, TimelineEventControl> eventControls = new Dictionary<TimelineEvent, TimelineEventControl>();
+		private List<TimelineEntry> timelineEntries = new List<TimelineEntry>();
+		private Dictionary<TimelineEntry, TimelineEntryControl> entryControls = new Dictionary<TimelineEntry, TimelineEntryControl>();
 
 		public TimelineLayerView()
 		{
@@ -57,69 +57,69 @@ namespace VideoEditorWPF
 			//Hook up the canvas pan transform
 			TransformGroup g = new TransformGroup();
 			g.Children.Add(canvasPan);
-			eventsCanvas.RenderTransform = g;
+			entriesCanvas.RenderTransform = g;
 		}
 
 		/// <summary>
-		/// Adds an event to the timeline
+		/// Adds an entry to the timeline
 		/// </summary>
-		/// <param name="timelineEvent"></param>
-		public void AddEvent(TimelineEvent timelineEvent)
+		/// <param name="timelineEntry"></param>
+		public void AddEntry(TimelineEntry timelineEntry)
 		{
-			timelineEvents.Add(timelineEvent);
+			timelineEntries.Add(timelineEntry);
 
-			//Create a control for this event
-			TimelineEventControl eventControl = new TimelineEventControl(timelineEvent, this);
-			eventControls.Add(timelineEvent, eventControl);
+			//Create a control for this entry
+			TimelineEntryControl entryControl = new TimelineEntryControl(timelineEntry, this);
+			entryControls.Add(timelineEntry, entryControl);
 
-			eventsCanvas.Children.Add(eventControl);
+			entriesCanvas.Children.Add(entryControl);
 
             //Position the control
-            eventControl.UpdateInterface();
+            entryControl.UpdateInterface();
 
             //Subscribe to the control's events
-            eventControl.UserResized += EventControl_UserResized;
+            entryControl.UserResized += EntryControl_UserResized;
 		}
 
         /// <summary>
-        /// Removes an event from the timeline
+        /// Removes an entry from the timeline
         /// </summary>
-        /// <param name="timelineEvent"></param>
-        public void RemoveEvent(TimelineEvent timelineEvent)
+        /// <param name="timelineEntry"></param>
+        public void RemoveEntry(TimelineEntry timelineEntry)
 		{
-			//Don't go on if that event doesn't exist
-			if (!timelineEvents.Contains(timelineEvent))
+			//Don't go on if that entry doesn't exist
+			if (!timelineEntries.Contains(timelineEntry))
 			{
 				return;
 			}
 
-			//Remove timeline event
-			timelineEvents.Remove(timelineEvent);
+			//Remove timeline entry
+			timelineEntries.Remove(timelineEntry);
 
 			//Remove its control
-			TimelineEventControl eventControl = eventControls[timelineEvent];
+			TimelineEntryControl entryControl = entryControls[timelineEntry];
 
-			eventControls.Remove(timelineEvent);
-			eventsCanvas.Children.Remove(eventControl);
+			entryControls.Remove(timelineEntry);
+			entriesCanvas.Children.Remove(entryControl);
 
             //Unsubscribe from events
-            eventControl.UserResized -= EventControl_UserResized;
+            entryControl.UserResized -= EntryControl_UserResized;
 		}
 
-        public TimelineEvent GetEvent(int index)
+        public TimelineEntry GetEntry(int index)
         {
-            return timelineEvents[index];
+            return timelineEntries[index];
         }
 
         /// <summary>
-        /// Returns the event that's occuring at the given time
-        /// Returns null if there is no event there
+        /// Returns the entry that's occuring at the given time
+        /// Returns null if there is no entry there
         /// </summary>
         /// <param name="time"></param>
         /// <returns></returns>
-        public TimelineEvent GetEventAt(double time)
+        public TimelineEntry GetEntryAt(double time)
 		{
-			foreach (TimelineEvent e in timelineEvents)
+			foreach (TimelineEntry e in timelineEntries)
 			{
 				if (time >= e.startTime && time < e.endTime)
 				{
@@ -138,17 +138,17 @@ namespace VideoEditorWPF
 		public void UpdateInterface()
 		{
 			//Position every control
-			foreach (TimelineEventControl eventControl in eventControls.Values)
+			foreach (TimelineEntryControl entryControl in entryControls.Values)
 			{
-                eventControl.UpdateInterface();
+                entryControl.UpdateInterface();
 			}
 		}
 
-        private void EventControl_UserResized(TimelineEventControl sender, double startTime, double endTime)
+        private void EntryControl_UserResized(TimelineEntryControl sender, double startTime, double endTime)
         {
             //Bubble up the event to the parent
-            if (eventResized != null)
-                eventResized(sender, startTime, endTime);
+            if (entryResized != null)
+                entryResized(sender, startTime, endTime);
         }
     }
 
