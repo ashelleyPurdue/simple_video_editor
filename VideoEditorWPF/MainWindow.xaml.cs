@@ -35,11 +35,11 @@ namespace VideoEditorWPF
             TimelineLayerView layerA = new TimelineLayerView();
             TimelineLayerView layerB = new TimelineLayerView();
 
-            layerA.AddEvent(new TimelineEntry("0-10", 0, 10, null));
-            layerB.AddEvent(new TimelineEntry("0-10", 0, 10, null));
+            layerA.AddEntry(new TimelineEntry("0-10", 0, 10, null));
+            layerB.AddEntry(new TimelineEntry("0-10", 0, 10, null));
             
-            layerA.AddEvent(new TimelineEntry("20-25", 20, 25, null));
-            layerB.AddEvent(new TimelineEntry("20-25", 20, 25, null));
+            layerA.AddEntry(new TimelineEntry("20-25", 20, 25, null));
+            layerB.AddEntry(new TimelineEntry("20-25", 20, 25, null));
 
             timelineView.AddLayer(layerA);
             timelineView.AddLayer(layerB);
@@ -63,15 +63,15 @@ namespace VideoEditorWPF
             timelineView.ScaleFactor = newScaleFactor;
 		}
 
-        private void timelineView_eventResized(TimelineEntryControl sender, double startTime, double endTime)
+        private void timelineView_entryResized(TimelineEntryControl sender, double startTime, double endTime)
         {
             //Reject the resize if the start time is after the end time
             if (startTime > endTime)
                 return;
 
             //Resize the event
-            sender.timelineEvent.startTime = startTime;
-            sender.timelineEvent.endTime = endTime;
+            sender.timelineEntry.startTime = startTime;
+            sender.timelineEntry.endTime = endTime;
             sender.UpdateInterface();
         }
     }
