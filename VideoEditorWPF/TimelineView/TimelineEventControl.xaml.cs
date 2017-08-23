@@ -15,12 +15,12 @@ using System.Windows.Shapes;
 
 namespace VideoEditorWPF
 {
-    public delegate void UserResizeHandler(TimelineEventControl sender, double startTime, double endTime);
+    public delegate void UserResizeHandler(TimelineEntryControl sender, double startTime, double endTime);
 
     /// <summary>
     /// Interaction logic for TimelineEventControl.xaml
     /// </summary>
-    public partial class TimelineEventControl : UserControl
+    public partial class TimelineEntryControl : UserControl
 	{
         #region subscribable events
         public event UserResizeHandler UserResized;     // Called when the user attempts to resize or move this event
@@ -33,7 +33,7 @@ namespace VideoEditorWPF
         private MouseDragMonitor rightHandleDragMonitor;
         private MouseDragMonitor moveDragMonitor;
 
-		public TimelineEventControl(TimelineEvent timelineEvent, TimelineLayerView parentLayerView)
+		public TimelineEntryControl(TimelineEvent timelineEvent, TimelineLayerView parentLayerView)
 		{
 			this.timelineEvent = timelineEvent;
             this.parentLayerView = parentLayerView;

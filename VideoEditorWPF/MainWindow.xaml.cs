@@ -63,7 +63,7 @@ namespace VideoEditorWPF
             timelineView.ScaleFactor = newScaleFactor;
 		}
 
-        private void timelineView_eventResized(TimelineEventControl sender, double startTime, double endTime)
+        private void timelineView_eventResized(TimelineEntryControl sender, double startTime, double endTime)
         {
             //Reject the resize if the start time is after the end time
             if (startTime > endTime)

@@ -156,7 +156,7 @@ namespace VideoEditorWPF
             UpdateLayer(layer);
         }
 
-        private void layer_eventResized(TimelineEventControl sender, double startTime, double endTime)
+        private void layer_eventResized(TimelineEntryControl sender, double startTime, double endTime)
         {
             //Bubble the event up
             if (eventResized != null)

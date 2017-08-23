@@ -48,7 +48,7 @@ namespace VideoEditorWPF
         private TranslateTransform canvasPan = new TranslateTransform();
 
 		private List<TimelineEvent> timelineEvents = new List<TimelineEvent>();
-		private Dictionary<TimelineEvent, TimelineEventControl> eventControls = new Dictionary<TimelineEvent, TimelineEventControl>();
+		private Dictionary<TimelineEvent, TimelineEntryControl> eventControls = new Dictionary<TimelineEvent, TimelineEntryControl>();
 
 		public TimelineLayerView()
 		{
@@ -69,7 +69,7 @@ namespace VideoEditorWPF
 			timelineEvents.Add(timelineEvent);
 
 			//Create a control for this event
-			TimelineEventControl eventControl = new TimelineEventControl(timelineEvent, this);
+			TimelineEntryControl eventControl = new TimelineEntryControl(timelineEvent, this);
 			eventControls.Add(timelineEvent, eventControl);
 
 			eventsCanvas.Children.Add(eventControl);
@@ -97,7 +97,7 @@ namespace VideoEditorWPF
 			timelineEvents.Remove(timelineEvent);
 
 			//Remove its control
-			TimelineEventControl eventControl = eventControls[timelineEvent];
+			TimelineEntryControl eventControl = eventControls[timelineEvent];
 
 			eventControls.Remove(timelineEvent);
 			eventsCanvas.Children.Remove(eventControl);
@@ -138,13 +138,13 @@ namespace VideoEditorWPF
 		public void UpdateInterface()
 		{
 			//Position every control
-			foreach (TimelineEventControl eventControl in eventControls.Values)
+			foreach (TimelineEntryControl eventControl in eventControls.Values)
 			{
                 eventControl.UpdateInterface();
 			}
 		}
 
-        private void EventControl_UserResized(TimelineEventControl sender, double startTime, double endTime)
+        private void EventControl_UserResized(TimelineEntryControl sender, double startTime, double endTime)
         {
             //Bubble up the event to the parent
             if (eventResized != null)
