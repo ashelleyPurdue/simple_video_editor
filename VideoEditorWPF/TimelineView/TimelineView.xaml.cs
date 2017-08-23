@@ -214,7 +214,7 @@ namespace VideoEditorWPF
             {
                 for (int i = 0; i < layer.NumEvents; i++)
                 {
-                    TimelineEvent timelineEvent = layer.GetEvent(i);
+                    TimelineEntry timelineEvent = layer.GetEvent(i);
 
                     snapPoints.Add(timelineEvent.startTime);
                     snapPoints.Add(timelineEvent.endTime);

@@ -57,7 +57,7 @@
     </ApplicationDefinition>
     <Compile Include="MouseDragMonitor.cs" />
     <Compile Include="TimelineView\IPannableZoomable.cs" />
-    <Compile Include="TimelineView\TimelineEvent.cs" />
+    <Compile Include="TimelineView\TimelineEntry.cs" />
     <Compile Include="TimelineView\TimelineEntryControl.xaml.cs">
       <DependentUpon>TimelineEntryControl.xaml</DependentUpon>
     </Compile>

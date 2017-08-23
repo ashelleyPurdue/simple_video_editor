@@ -35,11 +35,11 @@ namespace VideoEditorWPF
             TimelineLayerView layerA = new TimelineLayerView();
             TimelineLayerView layerB = new TimelineLayerView();
 
-            layerA.AddEvent(new TimelineEvent("0-10", 0, 10, null));
-            layerB.AddEvent(new TimelineEvent("0-10", 0, 10, null));
+            layerA.AddEvent(new TimelineEntry("0-10", 0, 10, null));
+            layerB.AddEvent(new TimelineEntry("0-10", 0, 10, null));
             
-            layerA.AddEvent(new TimelineEvent("20-25", 20, 25, null));
-            layerB.AddEvent(new TimelineEvent("20-25", 20, 25, null));
+            layerA.AddEvent(new TimelineEntry("20-25", 20, 25, null));
+            layerB.AddEvent(new TimelineEntry("20-25", 20, 25, null));
 
             timelineView.AddLayer(layerA);
             timelineView.AddLayer(layerB);

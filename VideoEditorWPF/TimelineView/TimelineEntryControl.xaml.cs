@@ -26,14 +26,14 @@ namespace VideoEditorWPF
         public event UserResizeHandler UserResized;     // Called when the user attempts to resize or move this event
         #endregion
 
-        public TimelineEvent timelineEvent { get; private set; }
+        public TimelineEntry timelineEvent { get; private set; }
 
         private TimelineLayerView parentLayerView;
         private MouseDragMonitor leftHandleDragMonitor;
         private MouseDragMonitor rightHandleDragMonitor;
         private MouseDragMonitor moveDragMonitor;
 
-		public TimelineEntryControl(TimelineEvent timelineEvent, TimelineLayerView parentLayerView)
+		public TimelineEntryControl(TimelineEntry timelineEvent, TimelineLayerView parentLayerView)
 		{
 			this.timelineEvent = timelineEvent;
             this.parentLayerView = parentLayerView;

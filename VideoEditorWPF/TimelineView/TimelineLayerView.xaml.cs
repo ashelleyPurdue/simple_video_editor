@@ -47,8 +47,8 @@ namespace VideoEditorWPF
 
         private TranslateTransform canvasPan = new TranslateTransform();
 
-		private List<TimelineEvent> timelineEvents = new List<TimelineEvent>();
-		private Dictionary<TimelineEvent, TimelineEntryControl> eventControls = new Dictionary<TimelineEvent, TimelineEntryControl>();
+		private List<TimelineEntry> timelineEvents = new List<TimelineEntry>();
+		private Dictionary<TimelineEntry, TimelineEntryControl> eventControls = new Dictionary<TimelineEntry, TimelineEntryControl>();
 
 		public TimelineLayerView()
 		{
@@ -64,7 +64,7 @@ namespace VideoEditorWPF
 		/// Adds an event to the timeline
 		/// </summary>
 		/// <param name="timelineEvent"></param>
-		public void AddEvent(TimelineEvent timelineEvent)
+		public void AddEvent(TimelineEntry timelineEvent)
 		{
 			timelineEvents.Add(timelineEvent);
 
@@ -85,7 +85,7 @@ namespace VideoEditorWPF
         /// Removes an event from the timeline
         /// </summary>
         /// <param name="timelineEvent"></param>
-        public void RemoveEvent(TimelineEvent timelineEvent)
+        public void RemoveEvent(TimelineEntry timelineEvent)
 		{
 			//Don't go on if that event doesn't exist
 			if (!timelineEvents.Contains(timelineEvent))
@@ -106,7 +106,7 @@ namespace VideoEditorWPF
             eventControl.UserResized -= EventControl_UserResized;
 		}
 
-        public TimelineEvent GetEvent(int index)
+        public TimelineEntry GetEvent(int index)
         {
             return timelineEvents[index];
         }
@@ -117,9 +117,9 @@ namespace VideoEditorWPF
         /// </summary>
         /// <param name="time"></param>
         /// <returns></returns>
-        public TimelineEvent GetEventAt(double time)
+        public TimelineEntry GetEventAt(double time)
 		{
-			foreach (TimelineEvent e in timelineEvents)
+			foreach (TimelineEntry e in timelineEvents)
 			{
 				if (time >= e.startTime && time < e.endTime)
 				{

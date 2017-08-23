@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace VideoEditorWPF
 {
-	public class TimelineEvent
+	public class TimelineEntry
 	{
 		public string name;
 
@@ -14,7 +14,7 @@ namespace VideoEditorWPF
 		public double endTime;
 		public Object data;
 
-		public TimelineEvent(string name, double startTime, double endTime, Object data)
+		public TimelineEntry(string name, double startTime, double endTime, Object data)
 		{
 			this.name = name;
 			this.startTime = startTime;
