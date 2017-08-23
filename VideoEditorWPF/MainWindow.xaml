@@ -25,5 +25,8 @@
             </Menu>
 
         </ToolBar>
+        <GroupBox Header="Imported Videos" HorizontalAlignment="Left" Height="299" Margin="10,23,0,0" VerticalAlignment="Top" Width="288" BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}" Foreground="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}">
+            <ListBox x:Name="importedVideosListbox" Margin="0"/>
+        </GroupBox>
     </Grid>
 </Window>
