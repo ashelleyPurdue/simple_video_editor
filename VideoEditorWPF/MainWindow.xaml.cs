@@ -74,5 +74,10 @@ namespace VideoEditorWPF
             sender.timelineEntry.endTime = endTime;
             sender.UpdateInterface();
         }
+
+        private void importVideoButton_Click(object sender, RoutedEventArgs e)
+        {
+            //TODO: Browse for a video file
+        }
     }
 }

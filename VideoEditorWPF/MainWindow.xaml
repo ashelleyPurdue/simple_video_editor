@@ -16,6 +16,14 @@
                       ResizeDirection="Rows"
                       ShowsPreview="True"
                       Grid.Row="0" Style="{DynamicResource DarkGridSplitterStyle}"/>
-        <local:TimelineView x:Name="timelineView" Margin="10" MouseWheel="timelineView_MouseWheel" Grid.Row="1" entryResized="timelineView_eventResized"/>
+        <local:TimelineView x:Name="timelineView" Margin="10" MouseWheel="timelineView_MouseWheel" Grid.Row="1" entryResized="timelineView_entryResized"/>
+        <ToolBar VerticalAlignment="Top">
+            <Menu VerticalAlignment="Top">
+                <MenuItem Header="Import">
+                    <MenuItem x:Name="importVideoButton" Header="Video" Click="importVideoButton_Click"/>
+                </MenuItem>
+            </Menu>
+
+        </ToolBar>
     </Grid>
 </Window>
