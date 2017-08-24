@@ -21,7 +21,7 @@ namespace VideoEditorWPF
 	public partial class MainWindow : Window
 	{
         private MouseDragMonitor timelinePanWatcher;
-
+        private Microsoft.Win32.OpenFileDialog importFileBrowser = new Microsoft.Win32.OpenFileDialog();
 
 		public MainWindow()
 		{
@@ -73,6 +73,28 @@ namespace VideoEditorWPF
             sender.timelineEntry.startTime = startTime;
             sender.timelineEntry.endTime = endTime;
             sender.UpdateInterface();
+        }
+
+        private void importVideoButton_Click(object sender, RoutedEventArgs e)
+        {
+            //Browse for a video file
+            bool? userConfirmed = importFileBrowser.ShowDialog();
+
+            //Don't go on if canceled
+            if (userConfirmed != true)
+                return;
+
+            //Don't go on if that file is already there
+            if (importedVideosListbox.Items.Contains(importFileBrowser.FileName))
+                return;
+
+            //Add the video file to the imported list
+            Label fileLabel = new Label();
+            fileLabel.Content = importFileBrowser.FileName;
+
+            importedVideosListbox.Items.Add(fileLabel);
+
+            //TODO: Allow the user to drag and drop a video into a timeline
         }
     }
 }
