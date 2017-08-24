@@ -89,9 +89,12 @@ namespace VideoEditorWPF
                 return;
 
             //Add the video file to the imported list
-            importedVideosListbox.Items.Add(importFileBrowser.FileName);
+            Label fileLabel = new Label();
+            fileLabel.Content = importFileBrowser.FileName;
 
+            importedVideosListbox.Items.Add(fileLabel);
 
+            //TODO: Allow the user to drag and drop a video into a timeline
         }
     }
 }
