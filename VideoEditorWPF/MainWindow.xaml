@@ -20,7 +20,7 @@
                       ResizeDirection="Rows"
                       ShowsPreview="True"
                       Grid.Row="0" Style="{DynamicResource DarkGridSplitterStyle}" Grid.ColumnSpan="2"/>
-        <local:TimelineView x:Name="timelineView" Margin="10" MouseWheel="timelineView_MouseWheel" Grid.Row="1" entryResized="timelineView_entryResized" Grid.ColumnSpan="2"/>
+        <local:TimelineView x:Name="timelineView" Margin="10,5,10,10" MouseWheel="timelineView_MouseWheel" Grid.Row="1" entryResized="timelineView_entryResized" Grid.ColumnSpan="2"/>
         <ToolBar VerticalAlignment="Top" Grid.ColumnSpan="2">
             <Menu VerticalAlignment="Top">
                 <MenuItem Header="Import">

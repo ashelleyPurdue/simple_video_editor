@@ -21,7 +21,7 @@ namespace VideoEditorWPF
 	public partial class MainWindow : Window
 	{
         private MouseDragMonitor timelinePanWatcher;
-
+        private Microsoft.Win32.OpenFileDialog importFileBrowser = new Microsoft.Win32.OpenFileDialog();
 
 		public MainWindow()
 		{
@@ -77,7 +77,21 @@ namespace VideoEditorWPF
 
         private void importVideoButton_Click(object sender, RoutedEventArgs e)
         {
-            //TODO: Browse for a video file
+            //Browse for a video file
+            bool? userConfirmed = importFileBrowser.ShowDialog();
+
+            //Don't go on if canceled
+            if (userConfirmed != true)
+                return;
+
+            //Don't go on if that file is already there
+            if (importedVideosListbox.Items.Contains(importFileBrowser.FileName))
+                return;
+
+            //Add the video file to the imported list
+            importedVideosListbox.Items.Add(importFileBrowser.FileName);
+
+
         }
     }
 }
