@@ -36,14 +36,14 @@ namespace VideoEditorWPF
             TimelineLayerView layerA = new TimelineLayerView();
             TimelineLayerView layerB = new TimelineLayerView();
 
+            timelineView.AddLayer(layerA);
+            timelineView.AddLayer(layerB);
+
             layerA.AddEntry(new TimelineEntry("0-10", 0, 10, null));
             layerB.AddEntry(new TimelineEntry("0-10", 0, 10, null));
             
             layerA.AddEntry(new TimelineEntry("20-25", 20, 25, null));
             layerB.AddEntry(new TimelineEntry("20-25", 20, 25, null));
-
-            timelineView.AddLayer(layerA);
-            timelineView.AddLayer(layerB);
         }
 
         private void TimelinePanWatcher_DragMoved(DragEventArgs args)
@@ -114,11 +114,8 @@ namespace VideoEditorWPF
             TimelineEntry newEntry = new TimelineEntry((string)clickedLabel.Content, 0, length, null);
             reader.Dispose();
 
-            //Create a new layer for it
-            //TODO: add it to an existing layer
-            TimelineLayerView newLayer = new TimelineLayerView();
-            newLayer.AddEntry(newEntry);
-            timelineView.AddLayer(newLayer);
+            //Add it to the timeline
+            timelineView.GetLayer(0).AddEntry(newEntry);
         }
     }
 }
