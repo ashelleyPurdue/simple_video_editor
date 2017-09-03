@@ -108,7 +108,7 @@ namespace VideoEditorWPF
 
             //Open the video file so we can get its length
             VideoFrameReader reader = new VideoFrameReader((string)clickedLabel.Content);
-            double length = (double)reader.Duration.Seconds;
+            double length = reader.Duration.TotalSeconds;
 
             //Create a timeline entry for it
             TimelineEntry newEntry = new TimelineEntry((string)clickedLabel.Content, 0, length, null);
