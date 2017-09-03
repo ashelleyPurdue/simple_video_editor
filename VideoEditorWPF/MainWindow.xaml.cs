@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using GleamTech.VideoUltimate;
 
 namespace VideoEditorWPF
 {
@@ -94,7 +95,30 @@ namespace VideoEditorWPF
 
             importedVideosListbox.Items.Add(fileLabel);
 
-            //TODO: Allow the user to drag and drop a video into a timeline
+            //Subscribe to the label's click event so the user can add it to the timeline
+            fileLabel.MouseDown += importedVideoLabel_MouseDown;
+        }
+
+        private void importedVideoLabel_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            //Add the video at 0 zero seconds on the timeline.
+            //TODO: Make the user drag it to the spot in the timeline they want.
+
+            Label clickedLabel = (Label)sender;
+
+            //Open the video file so we can get its length
+            VideoFrameReader reader = new VideoFrameReader((string)clickedLabel.Content);
+            double length = (double)reader.Duration.Seconds;
+
+            //Create a timeline entry for it
+            TimelineEntry newEntry = new TimelineEntry((string)clickedLabel.Content, 0, length, null);
+            reader.Dispose();
+
+            //Create a new layer for it
+            //TODO: add it to an existing layer
+            TimelineLayerView newLayer = new TimelineLayerView();
+            newLayer.AddEntry(newEntry);
+            timelineView.AddLayer(newLayer);
         }
     }
 }
