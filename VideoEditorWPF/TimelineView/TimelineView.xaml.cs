@@ -50,6 +50,8 @@ namespace VideoEditorWPF
         public event UserResizeHandler entryResized;    //Fires when the user tries to resize this entry
         #endregion
 
+        public int LayerCount { get { return layers.Count; } }
+
         //The height of each layer
         public double LayerHeight
         {
@@ -154,6 +156,11 @@ namespace VideoEditorWPF
 
             //Update this layer
             UpdateLayer(layer);
+        }
+
+        public TimelineLayerView GetLayer(int index)
+        {
+            return layers[index];
         }
 
         private void layer_entryResized(TimelineEntryControl sender, double startTime, double endTime)

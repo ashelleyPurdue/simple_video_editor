@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using GleamTech.VideoUltimate;
 
 namespace VideoEditorWPF
 {
@@ -22,6 +23,8 @@ namespace VideoEditorWPF
 	{
         private MouseDragMonitor timelinePanWatcher;
         private Microsoft.Win32.OpenFileDialog importFileBrowser = new Microsoft.Win32.OpenFileDialog();
+
+        private Dictionary<string, VideoFrameReader> importedVideos = new Dictionary<string, VideoFrameReader>();
 
 		public MainWindow()
 		{
@@ -35,14 +38,14 @@ namespace VideoEditorWPF
             TimelineLayerView layerA = new TimelineLayerView();
             TimelineLayerView layerB = new TimelineLayerView();
 
+            timelineView.AddLayer(layerA);
+            timelineView.AddLayer(layerB);
+
             layerA.AddEntry(new TimelineEntry("0-10", 0, 10, null));
             layerB.AddEntry(new TimelineEntry("0-10", 0, 10, null));
             
             layerA.AddEntry(new TimelineEntry("20-25", 20, 25, null));
             layerB.AddEntry(new TimelineEntry("20-25", 20, 25, null));
-
-            timelineView.AddLayer(layerA);
-            timelineView.AddLayer(layerB);
         }
 
         private void TimelinePanWatcher_DragMoved(DragEventArgs args)
@@ -84,17 +87,41 @@ namespace VideoEditorWPF
             if (userConfirmed != true)
                 return;
 
+            string fileName = importFileBrowser.FileName;
+
             //Don't go on if that file is already there
-            if (importedVideosListbox.Items.Contains(importFileBrowser.FileName))
+            if (importedVideos.ContainsKey(fileName))
                 return;
 
-            //Add the video file to the imported list
+            //Load the video file
+            importedVideos.Add(fileName, new VideoFrameReader(fileName));
+
+            //Update the listbox
             Label fileLabel = new Label();
-            fileLabel.Content = importFileBrowser.FileName;
+            fileLabel.Content = fileName;
 
             importedVideosListbox.Items.Add(fileLabel);
 
-            //TODO: Allow the user to drag and drop a video into a timeline
+            //Subscribe to the label's click event so the user can add it to the timeline
+            fileLabel.MouseDown += importedVideoLabel_MouseDown;
+        }
+
+        private void importedVideoLabel_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            //Add the video at 0 zero seconds on the timeline.
+            //TODO: Make the user drag it to the spot in the timeline they want.
+
+            Label clickedLabel = (Label)sender;
+
+            //Open the video file so we can get its length
+            VideoFrameReader reader = importedVideos[(string)clickedLabel.Content];
+            double length = reader.Duration.TotalSeconds;
+
+            //Create a timeline entry for it
+            TimelineEntry newEntry = new TimelineEntry((string)clickedLabel.Content, 0, length, null);
+
+            //Add it to the timeline
+            timelineView.GetLayer(0).AddEntry(newEntry);
         }
     }
 }
