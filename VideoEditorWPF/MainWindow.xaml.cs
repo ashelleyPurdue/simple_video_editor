@@ -24,11 +24,12 @@ namespace VideoEditorWPF
         private MouseDragMonitor timelinePanWatcher;
         private Microsoft.Win32.OpenFileDialog importFileBrowser = new Microsoft.Win32.OpenFileDialog();
 
-        private Dictionary<string, VideoFrameReader> importedVideos = new Dictionary<string, VideoFrameReader>();
-
 		public MainWindow()
 		{
 			InitializeComponent();
+
+            //Start with an empty project
+            Project.activeProject = new Project();
 
             //Subscribe to the timeline pan watcher so we can be informed when the user pans
             timelinePanWatcher = new MouseDragMonitor(timelineView, MouseButton.Middle);
@@ -90,11 +91,11 @@ namespace VideoEditorWPF
             string fileName = importFileBrowser.FileName;
 
             //Don't go on if that file is already there
-            if (importedVideos.ContainsKey(fileName))
+            if (Project.activeProject.importedVideos.ContainsKey(fileName))
                 return;
 
             //Load the video file
-            importedVideos.Add(fileName, new VideoFrameReader(fileName));
+            Project.activeProject.importedVideos.Add(fileName, new VideoFrameReader(fileName));
 
             //Update the listbox
             Label fileLabel = new Label();
@@ -114,7 +115,7 @@ namespace VideoEditorWPF
             Label clickedLabel = (Label)sender;
 
             //Open the video file so we can get its length
-            VideoFrameReader reader = importedVideos[(string)clickedLabel.Content];
+            VideoFrameReader reader = Project.activeProject.importedVideos[(string)clickedLabel.Content];
             double length = reader.Duration.TotalSeconds;
 
             //Create a timeline entry for it

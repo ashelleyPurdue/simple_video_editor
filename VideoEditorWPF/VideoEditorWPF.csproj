@@ -62,6 +62,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="MouseDragMonitor.cs" />
+    <Compile Include="Project.cs" />
     <Compile Include="TimelineView\IPannableZoomable.cs" />
     <Compile Include="TimelineView\TimelineEntry.cs" />
     <Compile Include="TimelineView\TimelineEntryControl.xaml.cs">
