@@ -43,6 +43,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -63,6 +64,7 @@
     </ApplicationDefinition>
     <Compile Include="MouseDragMonitor.cs" />
     <Compile Include="Project.cs" />
+    <Compile Include="ProjectLayer.cs" />
     <Compile Include="TimelineView\IPannableZoomable.cs" />
     <Compile Include="TimelineView\TimelineEntry.cs" />
     <Compile Include="TimelineView\TimelineEntryControl.xaml.cs">
