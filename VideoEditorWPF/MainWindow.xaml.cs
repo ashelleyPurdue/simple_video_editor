@@ -49,6 +49,33 @@ namespace VideoEditorWPF
             layerB.AddEntry(new TimelineEntry("20-25", 20, 25, null));
         }
 
+        #region update methods
+
+        private void UpdateImportedVideoBox()
+        {
+            //Remove all items from the imported videos listbox
+            foreach (Label videoLabel in importedVideosListbox.Items)
+            {
+                videoLabel.MouseDown -= importedVideoLabel_MouseDown;   //We need to unsubscribe from the event to
+                                                                        //make sure the labels we remove get garbage collected.
+            }
+            importedVideosListbox.Items.Clear();
+
+            //Add a new label for each imported video
+            foreach (string importedFile in Project.activeProject.importedVideos.Keys)
+            {
+                Label fileLabel = new Label();
+                fileLabel.Content = importedFile;
+
+                importedVideosListbox.Items.Add(fileLabel);
+
+                //Subscribe to the label's click event so the user can add it to the timeline
+                fileLabel.MouseDown += importedVideoLabel_MouseDown;
+            }
+        }
+
+        #endregion
+
         private void TimelinePanWatcher_DragMoved(DragEventArgs args)
         {
             //Pan the timeline by the amount the mouse moved
@@ -98,13 +125,7 @@ namespace VideoEditorWPF
             Project.activeProject.importedVideos.Add(fileName, new VideoFrameReader(fileName));
 
             //Update the listbox
-            Label fileLabel = new Label();
-            fileLabel.Content = fileName;
-
-            importedVideosListbox.Items.Add(fileLabel);
-
-            //Subscribe to the label's click event so the user can add it to the timeline
-            fileLabel.MouseDown += importedVideoLabel_MouseDown;
+            UpdateImportedVideoBox();
         }
 
         private void importedVideoLabel_MouseDown(object sender, MouseButtonEventArgs e)
@@ -123,6 +144,12 @@ namespace VideoEditorWPF
 
             //Add it to the timeline
             timelineView.GetLayer(0).AddEntry(newEntry);
+        }
+
+        private void importedVideosListbox_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            //Forward the event to the label that was clicked
+            System.Windows.Media.VisualTreeHelper.HitTest(this, Mouse.GetPosition(null));
         }
     }
 }

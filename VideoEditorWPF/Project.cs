@@ -9,7 +9,7 @@ namespace VideoEditorWPF
 {
     public class Project
     {
-        public static Project activeProject;
+        public static Project activeProject;    //The project that is currently open by the application
 
         public Dictionary<string, VideoFrameReader> importedVideos = new Dictionary<string, VideoFrameReader>();
     }
